@@ -9,7 +9,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HtmlAgilityPack;
-using IronOcr;
+
+using Google.Cloud.Vision.V1;
+using Image = Google.Cloud.Vision.V1.Image;
+using Google.Apis.Auth.OAuth2;
 
 namespace WindowsFormsApp1
 {
@@ -18,11 +21,20 @@ namespace WindowsFormsApp1
         public Form1()
         {
             InitializeComponent();
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+               
+            Image image = Image.FromFile("unknown.png");
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "G:\\Users\\Martin\\Downloads\\costcoapi.json");
+            ImageAnnotatorClient client = ImageAnnotatorClient.Create();
+            IReadOnlyList<EntityAnnotation> textAnnotations = client.DetectText(image);
+            foreach (EntityAnnotation text in textAnnotations)
+            {
+                Console.WriteLine($"Description: {text.Description}");
+            }
         }
 
 
@@ -63,23 +75,24 @@ namespace WindowsFormsApp1
             //bmpCrop.Save("node1.jpg");
 
 
-            var Ocr = new AdvancedOcr()
-            {
-                CleanBackgroundNoise = true,
-                EnhanceContrast = true,
-                EnhanceResolution = true,
-                Language = IronOcr.Languages.English.OcrLanguagePack,
-                Strategy = IronOcr.AdvancedOcr.OcrStrategy.Advanced,
-                ColorSpace = AdvancedOcr.OcrColorSpace.Color,
-                DetectWhiteTextOnDarkBackgrounds = false,
-                InputImageType = AdvancedOcr.InputTypes.Document,
-                RotateAndStraighten = true,
-                ReadBarCodes = false,
-                ColorDepth = 4
-            };
-            var Area = new Rectangle() { X = 0, Y = 0, Height = 250, Width = 400 };
-            var Results = Ocr.Read("test.png");
-            Console.WriteLine(Results);
+
+            //var Ocr = new AdvancedOcr()
+            //{
+            //    CleanBackgroundNoise = true,
+            //    EnhanceContrast = true,
+            //    EnhanceResolution = true,
+            //    Language = IronOcr.Languages.English.OcrLanguagePack,
+            //    Strategy = IronOcr.AdvancedOcr.OcrStrategy.Advanced,
+            //    ColorSpace = AdvancedOcr.OcrColorSpace.Color,
+            //    DetectWhiteTextOnDarkBackgrounds = false,
+            //    InputImageType = AdvancedOcr.InputTypes.Document,
+            //    RotateAndStraighten = true,
+            //    ReadBarCodes = false,
+            //    ColorDepth = 4
+            //};
+            //var Area = new Rectangle() { X = 0, Y = 0, Height = 250, Width = 400 };
+            //var Results = Ocr.Read("test.png");
+            //Console.WriteLine(Results);
         }
 
         class MyWebClient : WebClient
