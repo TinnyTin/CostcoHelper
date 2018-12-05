@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using HtmlAgilityPack;
 using IronOcr;
+using Google.Apis.Auth.OAuth2;
+using Google.Cloud.Storage.V1;
 
 namespace WindowsFormsApp1
 {
@@ -63,25 +65,42 @@ namespace WindowsFormsApp1
             //bmpCrop.Save("node1.jpg");
 
 
-            var Ocr = new AdvancedOcr()
-            {
-                CleanBackgroundNoise = true,
-                EnhanceContrast = true,
-                EnhanceResolution = true,
-                Language = IronOcr.Languages.English.OcrLanguagePack,
-                Strategy = IronOcr.AdvancedOcr.OcrStrategy.Advanced,
-                ColorSpace = AdvancedOcr.OcrColorSpace.Color,
-                DetectWhiteTextOnDarkBackgrounds = false,
-                InputImageType = AdvancedOcr.InputTypes.Document,
-                RotateAndStraighten = true,
-                ReadBarCodes = false,
-                ColorDepth = 4
-            };
-            var Area = new Rectangle() { X = 0, Y = 0, Height = 250, Width = 400 };
-            var Results = Ocr.Read("test.png");
-            Console.WriteLine(Results);
+            //    var Ocr = new AdvancedOcr()
+            //    {
+            //        CleanBackgroundNoise = true,
+            //        EnhanceContrast = true,
+            //        EnhanceResolution = true,
+            //        Language = IronOcr.Languages.English.OcrLanguagePack,
+            //        Strategy = IronOcr.AdvancedOcr.OcrStrategy.Advanced,
+            //        ColorSpace = AdvancedOcr.OcrColorSpace.Color,
+            //        DetectWhiteTextOnDarkBackgrounds = false,
+            //        InputImageType = AdvancedOcr.InputTypes.Document,
+            //        RotateAndStraighten = true,
+            //        ReadBarCodes = false,
+            //        ColorDepth = 4
+            //    };
+            //    var Area = new Rectangle() { X = 0, Y = 0, Height = 250, Width = 400 };
+            //    var Results = Ocr.Read("test.png");
+            //    Console.WriteLine(Results);
+           
+            AuthExplicit("favorable - valor - 224609", "C:\\Users\\Judy\\costcoapi.json");
+
         }
 
+        public object AuthExplicit(string projectId, string jsonPath)
+        {
+            // Explicitly use service account credentials by specifying 
+            // the private key file.
+            var credential = GoogleCredential.FromFile(jsonPath);
+            var storage = StorageClient.Create(credential);
+            // Make an authenticated API request.
+            var buckets = storage.ListBuckets(projectId);
+            foreach (var bucket in buckets)
+            {
+                Console.WriteLine(bucket.Name);
+            }
+            return null;
+        }
         class MyWebClient : WebClient
         {
             protected override WebRequest GetWebRequest(Uri address)
