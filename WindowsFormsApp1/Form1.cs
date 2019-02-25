@@ -36,23 +36,22 @@ namespace WindowsFormsApp1
                 Bitmap bmpImage = new Bitmap(img);
                 Bitmap bmpCrop = bmpImage.Clone(new Rectangle(0, 0, 400, 250), bmpImage.PixelFormat);
                 bmpCrop.Save(pic + ".jpg");
-                //Google.Cloud.Vision.V1.Image image = Google.Cloud.Vision.V1.Image.FromFile(pic + ".jpg");
-                //Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\Users\\Judy\\costcoapi.json");
-                //ImageAnnotatorClient client = ImageAnnotatorClient.Create();
-                //IReadOnlyList<EntityAnnotation> textAnnotations = client.DetectText(image);
-                //string[] text = textAnnotations[0].Description.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
-                //Console.WriteLine(textAnnotations[0].Description);
+                Google.Cloud.Vision.V1.Image image = Google.Cloud.Vision.V1.Image.FromFile(pic + ".jpg");
+                Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\Users\\Judy\\costcoapi.json");
+                ImageAnnotatorClient client = ImageAnnotatorClient.Create();
+                IReadOnlyList<EntityAnnotation> textAnnotations = client.DetectText(image);
+                string[] text = textAnnotations[0].Description.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                Console.WriteLine(textAnnotations[0].Description);
 
 
-                //object[] result = parseDescription(text);
-                //Console.WriteLine("Results: \n" + result[0]);
-                //Console.WriteLine("Price: " + result[1]);
-                //Console.WriteLine("Sale Price: " + result[2]);
-                //Console.WriteLine("Clearance: " + result[3]);
-                //Console.WriteLine("Meat: " + result[4]);
-                dataGridView1.Rows.Add("", "", "", "", "click");
-                
-                //dataGridView1.Rows.Add(result[0], result[2], result[1], result[3], img);
+                object[] result = parseDescription(text);
+                Console.WriteLine("Results: \n" + result[0]);
+                Console.WriteLine("Price: " + result[1]);
+                Console.WriteLine("Sale Price: " + result[2]);
+                Console.WriteLine("Clearance: " + result[3]);
+                Console.WriteLine("Meat: " + result[4]);
+
+                dataGridView1.Rows.Add(result[0], result[2], result[1], result[3], "click");
 
             }
 
@@ -188,15 +187,6 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (dataGridView1.CurrentCell.ColumnIndex.Equals(3) && e.RowIndex != -1)
-            {
-                if (dataGridView1.CurrentCell != null && dataGridView1.CurrentCell.Value != null)
-                {
-                    Process.Start("J:\\Users\\Judy\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1\\bin\\Debug\\node11.jpg");
-                }
-            }
-        }
+
     }
 }

@@ -158,14 +158,14 @@ namespace WindowsFormsApp1
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (dataGridView1.CurrentCell.ColumnIndex.Equals(3) && e.RowIndex != -1)
+            if (dataGridView1.CurrentCell.ColumnIndex.Equals(4) && e.RowIndex != -1)
             {
                 if (dataGridView1.CurrentCell != null && dataGridView1.CurrentCell.Value != null)
                 {
-                Process.Start("J:\\Users\\Judy\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1\\bin\\Debug\\node11.jpg");
+                    Process.Start("J:\\Users\\Judy\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1\\bin\\Debug\\node11.jpg");
                 }
             }
-            
+
         }
 
         #endregion
