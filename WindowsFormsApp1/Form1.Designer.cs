@@ -1,4 +1,9 @@
-﻿namespace WindowsFormsApp1
+﻿using System;
+using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp1
 {
     partial class Form1
     {
@@ -33,6 +38,13 @@
             this.label3 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.retrieve = new System.Windows.Forms.Button();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Picture = new System.Windows.Forms.DataGridViewLinkColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -84,11 +96,52 @@
             this.retrieve.UseVisualStyleBackColor = true;
             this.retrieve.Click += new System.EventHandler(this.retrieve_Click);
             // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column1,
+            this.Column2,
+            this.Column3,
+            this.Column4,
+            this.Picture});
+            this.dataGridView1.Location = new System.Drawing.Point(2, 61);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(900, 452);
+            this.dataGridView1.TabIndex = 5;
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Name";
+            this.Column1.Name = "Column1";
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "Price";
+            this.Column2.Name = "Column2";
+            // 
+            // Column3
+            // 
+            this.Column3.HeaderText = "Original Price";
+            this.Column3.Name = "Column3";
+            // 
+            // Column4
+            // 
+            this.Column4.HeaderText = "Discount %";
+            this.Column4.Name = "Column4";
+            // 
+            // Picture
+            // 
+            this.Picture.HeaderText = "Picture";
+            this.Picture.Name = "Picture";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(904, 516);
+            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.retrieve);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label3);
@@ -97,9 +150,22 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dataGridView1.CurrentCell.ColumnIndex.Equals(3) && e.RowIndex != -1)
+            {
+                if (dataGridView1.CurrentCell != null && dataGridView1.CurrentCell.Value != null)
+                {
+                Process.Start("J:\\Users\\Judy\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1\\bin\\Debug\\node11.jpg");
+                }
+            }
+            
         }
 
         #endregion
@@ -109,6 +175,12 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button retrieve;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.DataGridViewLinkColumn Picture;
     }
 }
 
