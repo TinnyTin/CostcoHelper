@@ -13,6 +13,7 @@ using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Vision.V1;
 using System.Drawing;
 using System.Diagnostics;
+using System.IO;
 
 namespace WindowsFormsApp1
 {
@@ -24,41 +25,14 @@ namespace WindowsFormsApp1
             InitializeComponent();
         }
 
-
+        int num = 1;
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Column1.Width = 350;
-            for (int i = 1; i < 2; i++)
-            {
-                string pic = "node" + i.ToString();
-                System.Drawing.Image img = System.Drawing.Image.FromFile(pic + ".png");
-                Bitmap bmpImage = new Bitmap(img);
-                Bitmap bmpCrop = bmpImage.Clone(new Rectangle(0, 0, 400, 250), bmpImage.PixelFormat);
-                bmpCrop.Save(pic + ".jpg");
-                Google.Cloud.Vision.V1.Image image = Google.Cloud.Vision.V1.Image.FromFile(pic + ".jpg");
-                Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\Users\\Judy\\costcoapi.json");
-                ImageAnnotatorClient client = ImageAnnotatorClient.Create();
-                IReadOnlyList<EntityAnnotation> textAnnotations = client.DetectText(image);
-                string[] text = textAnnotations[0].Description.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
-                Console.WriteLine(textAnnotations[0].Description);
-
-
-                object[] result = parseDescription(text);
-                Console.WriteLine("Results: \n" + result[0]);
-                Console.WriteLine("Price: " + result[1]);
-                Console.WriteLine("Sale Price: " + result[2]);
-                Console.WriteLine("Clearance: " + result[3]);
-                Console.WriteLine("Meat: " + result[4]);
-
-                dataGridView1.Rows.Add(result[0], result[2], result[1], result[3], "click");
-
-            }
-
-
 
         }
 
+        // Parses string[] into an object[4] with the resulting table data.
         public object[] parseDescription(string[] text)
         {
             int index = 1;
@@ -110,9 +84,12 @@ namespace WindowsFormsApp1
                     index++;
                 }
             }
-            return new object[] { itemName, initPrice, salePrice, (initPrice - salePrice) / initPrice, clearance, meat };
+            double discount = (initPrice - salePrice) / initPrice;
+ 
+            return new object[] { itemName, initPrice, salePrice, discount, clearance, meat };
         }
 
+        // Check if string is allcaps
         public bool IsAllUpper(string input)
         {
             for (int i = 0; i < input.Length; i++)
@@ -123,57 +100,80 @@ namespace WindowsFormsApp1
             return true;
         }
 
+        // RETRIEVE ON CLICK
         private void retrieve_Click(object sender, EventArgs e)
         {
+            num = 1;
+
             var data = new MyWebClient().DownloadString(textBox1.Text);
             var doc = new HtmlAgilityPack.HtmlDocument();
             doc.LoadHtml(data);
-            //Console.WriteLine(data);
             var htmlNodeList = doc.DocumentNode.SelectNodes("//dt[@class='gallery-icon landscape']");
             var nodeList = new List<string>();
 
-            //foreach (var node in htmlNodeList)
-            //{
-            //    var src = node.SelectSingleNode(".//img").GetAttributeValue("src", "src not found");
-            //    if (!src.ToString().Contains("Costco"))
-            //    {
-            //        nodeList.Add(node.SelectSingleNode(".//img").GetAttributeValue("src", "src not found"));
-            //    }
-            //}
-            //var link = htmlNodeList[0].GetAttributeValue("src", "not found");
-            //Console.WriteLine(nodeList[1]);
+            foreach (var node in htmlNodeList)
+            {
+                var src = node.SelectSingleNode(".//img").GetAttributeValue("src", "src not found");
+                if (!src.ToString().Contains("Costco"))
+                {
+                    nodeList.Add(node.SelectSingleNode(".//img").GetAttributeValue("src", "src not found"));
+                }
+            }
+            var link = htmlNodeList[0].GetAttributeValue("src", "not found");
+            Console.WriteLine(nodeList[1]);
 
-            //var num = 1;
-            //foreach (string node in nodeList)
-            //{
-            //    using (WebClient webClient = new WebClient())
-            //    {
-            //        webClient.DownloadFile(node, "node" + num.ToString() + ".png");
-            //        num++;
-            //    }
-            //}
+            
+            foreach (string node in nodeList)
+            {
+                using (WebClient webClient = new WebClient())
+                {
+                    webClient.DownloadFile(node, "node" + num.ToString() + ".png");
+                    num++;
+                }
+            }
+
+            Column1.Width = 350;
+            for (int i = 1; i < 10; i++)
+            {
+                // HELPER FUNCTION
+                string pic = "node" + i.ToString();
+                System.Drawing.Image img = System.Drawing.Image.FromFile(pic + ".png");
+                Bitmap bmpImage = new Bitmap(img);
+                Bitmap bmpCrop = bmpImage.Clone(new Rectangle(0, 0, 400, 250), bmpImage.PixelFormat);
+                bmpCrop.Save(pic + ".jpg");
+
+                if (File.Exists(pic + ".png"))
+                {
+                    // HELPER FUNCTION
+                    Google.Cloud.Vision.V1.Image image = Google.Cloud.Vision.V1.Image.FromFile(pic + ".jpg");
+                    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\Users\\Judy\\costcoapi.json");
+                    ImageAnnotatorClient client = ImageAnnotatorClient.Create();
+                    IReadOnlyList<EntityAnnotation> textAnnotations = client.DetectText(image);
+                    string[] text = textAnnotations[0].Description.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
 
+                    // DEBUG WRITELINES
+                    Console.WriteLine(textAnnotations[0].Description);
+                    object[] result = parseDescription(text);
+                    Console.WriteLine("Results: \n" + result[0]);
+                    Console.WriteLine("Price: " + result[1]);
+                    Console.WriteLine("Sale Price: " + result[2]);
+                    Console.WriteLine("Clearance: " + result[3]);
+                    Console.WriteLine("Meat: " + result[4]);
 
-            //   var ocr = new advancedocr()
-            //    {
-            //       cleanbackgroundnoise = true,
-            //       enhancecontrast = true,
-            //       enhanceresolution = true,
-            //       language = ironocr.languages.english.ocrlanguagepack,
-            //       strategy = ironocr.advancedocr.ocrstrategy.advanced,
-            //       colorspace = advancedocr.ocrcolorspace.color,
-            //       detectwhitetextondarkbackgrounds = false,
-            //       inputimagetype = advancedocr.inputtypes.document,
-            //       rotateandstraighten = true,
-            //       readbarcodes = false,
-            //       colordepth = 4
-            //   };
-            //  var area = new rectangle() { x = 0, y = 0, height = 250, width = 400 };
-            //   var results = ocr.read("test.png");
-            //   console.writeline(results);
+
+                    // ADD TO ROW
+                    dataGridView1.Rows.Add(result[0], result[2], result[1], result[3], "click");
+                }
+            }
 
             // authexplicit("favorable - valor - 224609", "c:\\users\\judy\\costcoapi.json");
+
+        }
+
+        // HELPER
+        public requestGoogleVision()
+        {
 
         }
 
@@ -187,6 +187,14 @@ namespace WindowsFormsApp1
             }
         }
 
+        private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            Console.WriteLine(e.GetType());
+        }
 
+        private void button1_click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
