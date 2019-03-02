@@ -39,13 +39,14 @@ namespace WindowsFormsApp1
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.retrieve = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clearance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Picture = new System.Windows.Forms.DataGridViewLinkColumn();
+            this.delete = new System.Windows.Forms.Button();
+            this.loadtable = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -115,16 +116,6 @@ namespace WindowsFormsApp1
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             this.dataGridView1.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellValueChanged);
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(804, 5);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(78, 23);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "Delete Files";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_click);
-            // 
             // Column1
             // 
             this.Column1.HeaderText = "Name";
@@ -155,12 +146,33 @@ namespace WindowsFormsApp1
             this.Picture.HeaderText = "Picture";
             this.Picture.Name = "Picture";
             // 
+            // delete
+            // 
+            this.delete.Location = new System.Drawing.Point(804, 5);
+            this.delete.Name = "delete";
+            this.delete.Size = new System.Drawing.Size(78, 23);
+            this.delete.TabIndex = 6;
+            this.delete.Text = "Delete Files";
+            this.delete.UseVisualStyleBackColor = true;
+            this.delete.Click += new System.EventHandler(this.delete_click);
+            // 
+            // loadtable
+            // 
+            this.loadtable.Location = new System.Drawing.Point(713, 32);
+            this.loadtable.Name = "loadtable";
+            this.loadtable.Size = new System.Drawing.Size(88, 26);
+            this.loadtable.TabIndex = 7;
+            this.loadtable.Text = "Load Table";
+            this.loadtable.UseVisualStyleBackColor = true;
+            this.loadtable.Click += new System.EventHandler(this.loadtable_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(904, 516);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.loadtable);
+            this.Controls.Add(this.delete);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.retrieve);
             this.Controls.Add(this.textBox1);
@@ -200,13 +212,14 @@ namespace WindowsFormsApp1
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button retrieve;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private Button button1;
+        private Button delete;
         private DataGridViewTextBoxColumn Column1;
         private DataGridViewTextBoxColumn Column2;
         private DataGridViewTextBoxColumn Column3;
         private DataGridViewTextBoxColumn Column4;
         private DataGridViewTextBoxColumn clearance;
         private DataGridViewLinkColumn Picture;
+        private Button loadtable;
     }
 }
 

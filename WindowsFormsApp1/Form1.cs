@@ -53,7 +53,7 @@ namespace WindowsFormsApp1
                     if (!string.IsNullOrEmpty(line))
                     {
                         // Serial - No current usage
-                        var isNumeric = int.TryParse(line, out int n);
+                        var isNumeric = double.TryParse(line, out double n);
                         //if (isNumeric && index == 1) serial = line.Trim();
                         // Item Name 
                         if (index < 5 && IsAllUpper(line) && !isNumeric) itemName += " " + line;
@@ -107,7 +107,7 @@ namespace WindowsFormsApp1
         }
 
         // RETRIEVE ON CLICK
-        private async void retrieve_Click(object sender, EventArgs e)
+        private void retrieve_Click(object sender, EventArgs e)
         {
             num = 1;
 
@@ -138,33 +138,8 @@ namespace WindowsFormsApp1
                 }
             }
 
-            for (int i = 1; i <= 15; i++)
-            {
-                // String name of the file.
-                string pic = "node" + i.ToString();
-
-                // Load and Save nodes as cropped images (.jpg file format)
-                if (File.Exists(pic + ".png"))
-                {
-                    System.Drawing.Image img = System.Drawing.Image.FromFile(pic + ".png");
-                    cropImage(img).Save(pic + ".jpg");
-                    string[] text = await RequestGoogleVisionAsync(pic);
-                    object[] result = parseDescription(text);
-
-                    // DEBUG WRITELINES
-                    //Console.WriteLine(text);
-                    //Console.WriteLine("Results: \n" + result[0]);
-                    //Console.WriteLine("Price: " + result[1]);
-                    //Console.WriteLine("Sale Price: " + result[2]);
-                    //Console.WriteLine("Clearance: " + result[3]);
-                    //Console.WriteLine("Meat: " + result[4]);
-
-                    // ADD TO ROW
-                    
-                    dataGridView1.Rows.Add(removeInts(result[0].ToString()), result[2], result[1], result[3], result[4].ToString(), "click");
-
-                }
-            }
+            
+            
 
             //for (int i = 1; i <= 2; i++)
             //{
@@ -222,10 +197,44 @@ namespace WindowsFormsApp1
             Console.WriteLine(e.GetType());
         }
 
-        private void button1_click(object sender, EventArgs e)
+        private void delete_click(object sender, EventArgs e)
         {
 
         }
 
+        public async void loadtable_Click(object sender, EventArgs e)
+
+        //for (int i = 1; i <= 15; i++)
+        {
+            // String name of the file.
+            string pic = "node92";
+            //string pic = "node" + i.ToString();
+
+            // Load and Save nodes as cropped images (.jpg file format)
+            if (File.Exists(pic + ".png"))
+            {
+                System.Drawing.Image img = System.Drawing.Image.FromFile(pic + ".png");
+                cropImage(img).Save(pic + ".jpg");
+                string[] text = await RequestGoogleVisionAsync(pic);
+                object[] result = parseDescription(text);
+
+                // DEBUG WRITELINES
+                foreach (string s in text)
+                {
+                    Console.WriteLine(s);
+                }
+
+                Console.WriteLine("Results: \n" + result[0]);
+                Console.WriteLine("Price: " + result[1]);
+                Console.WriteLine("Sale Price: " + result[2]);
+                Console.WriteLine("Clearance: " + result[3]);
+                Console.WriteLine("Meat: " + result[4]);
+
+                // ADD TO ROW
+
+                dataGridView1.Rows.Add(removeInts(result[0].ToString()), result[2], result[1], result[3], result[4].ToString(), "click");
+
+            }
+        }
     }
 }
