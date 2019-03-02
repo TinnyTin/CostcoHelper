@@ -7,6 +7,7 @@ using Google.Cloud.Vision.V1;
 using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace WindowsFormsApp1
 {
@@ -24,6 +25,8 @@ namespace WindowsFormsApp1
         {
             Column1.Width = 350;
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\Users\\Judy\\costcoapi.json");
+
+
         }
 
         // Parses string[] into an object[4] with the resulting table data.
@@ -79,11 +82,11 @@ namespace WindowsFormsApp1
                 }
             }
 
-            double discount = ((initPrice - salePrice) / initPrice)*100;
+            double discount = Math.Round(((initPrice - salePrice) / initPrice)*100,2);
             if (!Double.IsNaN(discount))
             {
                 Math.Round(discount, 2);
-                if (discount == 1)
+                if (discount == 100)
                 {
                     discount = 0;
                 }
@@ -135,7 +138,7 @@ namespace WindowsFormsApp1
                 }
             }
 
-            for (int i = 1; i <= num; i++)
+            for (int i = 1; i <= 15; i++)
             {
                 // String name of the file.
                 string pic = "node" + i.ToString();
@@ -149,15 +152,16 @@ namespace WindowsFormsApp1
                     object[] result = parseDescription(text);
 
                     // DEBUG WRITELINES
-                    Console.WriteLine(text);
-                    Console.WriteLine("Results: \n" + result[0]);
-                    Console.WriteLine("Price: " + result[1]);
-                    Console.WriteLine("Sale Price: " + result[2]);
-                    Console.WriteLine("Clearance: " + result[3]);
-                    Console.WriteLine("Meat: " + result[4]);
+                    //Console.WriteLine(text);
+                    //Console.WriteLine("Results: \n" + result[0]);
+                    //Console.WriteLine("Price: " + result[1]);
+                    //Console.WriteLine("Sale Price: " + result[2]);
+                    //Console.WriteLine("Clearance: " + result[3]);
+                    //Console.WriteLine("Meat: " + result[4]);
 
                     // ADD TO ROW
-                    dataGridView1.Rows.Add(result[0], result[2], result[1], result[3], result[4].ToString(), "click");
+                    
+                    dataGridView1.Rows.Add(removeInts(result[0].ToString()), result[2], result[1], result[3], result[4].ToString(), "click");
 
                 }
             }
@@ -178,7 +182,13 @@ namespace WindowsFormsApp1
 
         }
 
-
+        public string removeInts(string title)
+        {
+            title = title.Trim(new Char[] { '"' });
+            title = Regex.Replace(title, @"\d{2,}", "");
+            Console.WriteLine(title);
+            return title;
+        }
         // Crop a given image and return it.
         public Bitmap cropImage(System.Drawing.Image img)
         {

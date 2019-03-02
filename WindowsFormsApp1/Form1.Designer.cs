@@ -176,15 +176,17 @@ namespace WindowsFormsApp1
 
         }
 
+        //only works upon extracting all images. would not work if you start at node 10 to 20 for example. 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (dataGridView1.CurrentCell.ColumnIndex.Equals(4) && e.RowIndex != -1)
+            if (dataGridView1.CurrentCell.ColumnIndex.Equals(5) && e.RowIndex != -1)
             {
                 if (dataGridView1.CurrentCell != null && dataGridView1.CurrentCell.Value != null)
                 {
                     string row = (dataGridView1.CurrentCell.RowIndex + 1).ToString();
                     string path = "J:\\Users\\Judy\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1\\bin\\Debug\\node" + row + ".jpg";
                     Process.Start(path);
+                    Console.WriteLine(path.ToString());
                 }
             }
 
