@@ -39,12 +39,13 @@ namespace WindowsFormsApp1
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.retrieve = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.button1 = new System.Windows.Forms.Button();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clearance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Picture = new System.Windows.Forms.DataGridViewLinkColumn();
-            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -105,6 +106,7 @@ namespace WindowsFormsApp1
             this.Column2,
             this.Column3,
             this.Column4,
+            this.clearance,
             this.Picture});
             this.dataGridView1.Location = new System.Drawing.Point(2, 61);
             this.dataGridView1.Name = "dataGridView1";
@@ -112,6 +114,16 @@ namespace WindowsFormsApp1
             this.dataGridView1.TabIndex = 5;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             this.dataGridView1.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellValueChanged);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(804, 5);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(78, 23);
+            this.button1.TabIndex = 6;
+            this.button1.Text = "Delete Files";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_click);
             // 
             // Column1
             // 
@@ -133,20 +145,15 @@ namespace WindowsFormsApp1
             this.Column4.HeaderText = "Discount %";
             this.Column4.Name = "Column4";
             // 
+            // clearance
+            // 
+            this.clearance.HeaderText = "Clearance";
+            this.clearance.Name = "clearance";
+            // 
             // Picture
             // 
             this.Picture.HeaderText = "Picture";
             this.Picture.Name = "Picture";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(804, 5);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(78, 23);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "Delete Files";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_click);
             // 
             // Form1
             // 
@@ -175,7 +182,9 @@ namespace WindowsFormsApp1
             {
                 if (dataGridView1.CurrentCell != null && dataGridView1.CurrentCell.Value != null)
                 {
-                    Process.Start("J:\\Users\\Judy\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1\\bin\\Debug\\node11.jpg");
+                    string row = (dataGridView1.CurrentCell.RowIndex + 1).ToString();
+                    string path = "J:\\Users\\Judy\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1\\bin\\Debug\\node" + row + ".jpg";
+                    Process.Start(path);
                 }
             }
 
@@ -189,12 +198,13 @@ namespace WindowsFormsApp1
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button retrieve;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
-        private System.Windows.Forms.DataGridViewLinkColumn Picture;
         private Button button1;
+        private DataGridViewTextBoxColumn Column1;
+        private DataGridViewTextBoxColumn Column2;
+        private DataGridViewTextBoxColumn Column3;
+        private DataGridViewTextBoxColumn Column4;
+        private DataGridViewTextBoxColumn clearance;
+        private DataGridViewLinkColumn Picture;
     }
 }
 

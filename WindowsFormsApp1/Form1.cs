@@ -78,7 +78,16 @@ namespace WindowsFormsApp1
                     index++;
                 }
             }
-            double discount = (initPrice - salePrice) / initPrice;
+
+            double discount = ((initPrice - salePrice) / initPrice)*100;
+            if (!Double.IsNaN(discount))
+            {
+                Math.Round(discount, 2);
+                if (discount == 1)
+                {
+                    discount = 0;
+                }
+            }
 
             return new object[] { itemName, initPrice, salePrice, discount, clearance, meat };
         }
@@ -148,23 +157,23 @@ namespace WindowsFormsApp1
                     Console.WriteLine("Meat: " + result[4]);
 
                     // ADD TO ROW
-                    dataGridView1.Rows.Add(result[0], result[2], result[1], result[3], "click");
+                    dataGridView1.Rows.Add(result[0], result[2], result[1], result[3], result[4].ToString(), "click");
 
                 }
             }
 
-            for (int i = 1; i <= num; i++)
-            {
-                // String name of the file.
-                string pic = "node" + i.ToString();
+            //for (int i = 1; i <= 2; i++)
+            //{
+            //    // String name of the file.
+            //    string pic = "node" + i.ToString();
 
-                // Load and Save nodes as cropped images (.jpg file format)
-                if (File.Exists(pic + ".png"))
-                {
+            //    // Load and Save nodes as cropped images (.jpg file format)
+            //    if (File.Exists(pic + ".png"))
+            //    {
                     
 
-                }
-            }
+            //    }
+            //}
 // authexplicit("favorable - valor - 224609", "c:\\users\\judy\\costcoapi.json");
 
         }
@@ -207,5 +216,6 @@ namespace WindowsFormsApp1
         {
 
         }
+
     }
 }
