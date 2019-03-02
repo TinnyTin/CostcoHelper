@@ -1,19 +1,12 @@
 ﻿using System;
 using System.Net;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using HtmlAgilityPack;
-using IronOcr;
-using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Vision.V1;
 using System.Drawing;
-using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace WindowsFormsApp1
 {
@@ -29,7 +22,8 @@ namespace WindowsFormsApp1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            Column1.Width = 350;
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\Users\\Judy\\costcoapi.json");
         }
 
         // Parses string[] into an object[4] with the resulting table data.
@@ -85,7 +79,7 @@ namespace WindowsFormsApp1
                 }
             }
             double discount = (initPrice - salePrice) / initPrice;
- 
+
             return new object[] { itemName, initPrice, salePrice, discount, clearance, meat };
         }
 
@@ -101,7 +95,7 @@ namespace WindowsFormsApp1
         }
 
         // RETRIEVE ON CLICK
-        private void retrieve_Click(object sender, EventArgs e)
+        private async void retrieve_Click(object sender, EventArgs e)
         {
             num = 1;
 
@@ -132,49 +126,66 @@ namespace WindowsFormsApp1
                 }
             }
 
-            Column1.Width = 350;
-            for (int i = 1; i < 10; i++)
+            for (int i = 1; i <= num; i++)
             {
-                // HELPER FUNCTION
+                // String name of the file.
                 string pic = "node" + i.ToString();
-                System.Drawing.Image img = System.Drawing.Image.FromFile(pic + ".png");
-                Bitmap bmpImage = new Bitmap(img);
-                Bitmap bmpCrop = bmpImage.Clone(new Rectangle(0, 0, 400, 250), bmpImage.PixelFormat);
-                bmpCrop.Save(pic + ".jpg");
 
+                // Load and Save nodes as cropped images (.jpg file format)
                 if (File.Exists(pic + ".png"))
                 {
-                    // HELPER FUNCTION
-                    Google.Cloud.Vision.V1.Image image = Google.Cloud.Vision.V1.Image.FromFile(pic + ".jpg");
-                    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\Users\\Judy\\costcoapi.json");
-                    ImageAnnotatorClient client = ImageAnnotatorClient.Create();
-                    IReadOnlyList<EntityAnnotation> textAnnotations = client.DetectText(image);
-                    string[] text = textAnnotations[0].Description.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
-
+                    System.Drawing.Image img = System.Drawing.Image.FromFile(pic + ".png");
+                    cropImage(img).Save(pic + ".jpg");
+                    string[] text = await RequestGoogleVisionAsync(pic);
+                    object[] result = parseDescription(text);
 
                     // DEBUG WRITELINES
-                    Console.WriteLine(textAnnotations[0].Description);
-                    object[] result = parseDescription(text);
+                    Console.WriteLine(text);
                     Console.WriteLine("Results: \n" + result[0]);
                     Console.WriteLine("Price: " + result[1]);
                     Console.WriteLine("Sale Price: " + result[2]);
                     Console.WriteLine("Clearance: " + result[3]);
                     Console.WriteLine("Meat: " + result[4]);
 
-
                     // ADD TO ROW
                     dataGridView1.Rows.Add(result[0], result[2], result[1], result[3], "click");
+
                 }
             }
 
-            // authexplicit("favorable - valor - 224609", "c:\\users\\judy\\costcoapi.json");
+            for (int i = 1; i <= num; i++)
+            {
+                // String name of the file.
+                string pic = "node" + i.ToString();
+
+                // Load and Save nodes as cropped images (.jpg file format)
+                if (File.Exists(pic + ".png"))
+                {
+                    
+
+                }
+            }
+// authexplicit("favorable - valor - 224609", "c:\\users\\judy\\costcoapi.json");
 
         }
 
-        // HELPER
-        public requestGoogleVision()
-        {
 
+        // Crop a given image and return it.
+        public Bitmap cropImage(System.Drawing.Image img)
+        {
+            Bitmap bmpImage = new Bitmap(img);
+            Bitmap bmpCrop = bmpImage.Clone(new Rectangle(0, 0, 400, 250), bmpImage.PixelFormat);
+            return bmpCrop;
+        }
+
+        // HELPER
+        private async Task<string[]> RequestGoogleVisionAsync(string filename)
+        {
+            ImageAnnotatorClient client = ImageAnnotatorClient.Create();
+            Google.Cloud.Vision.V1.Image image = Google.Cloud.Vision.V1.Image.FromFile(filename+".jpg");
+            IReadOnlyList<EntityAnnotation> textAnnotations = await client.DetectTextAsync(image);
+            string[] text = textAnnotations[0].Description.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            return text;
         }
 
         class MyWebClient : WebClient
