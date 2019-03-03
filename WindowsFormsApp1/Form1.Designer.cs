@@ -47,7 +47,9 @@ namespace WindowsFormsApp1
             this.Picture = new System.Windows.Forms.DataGridViewLinkColumn();
             this.delete = new System.Windows.Forms.Button();
             this.loadtable = new System.Windows.Forms.Button();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -111,7 +113,7 @@ namespace WindowsFormsApp1
             this.Picture});
             this.dataGridView1.Location = new System.Drawing.Point(2, 61);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(900, 452);
+            this.dataGridView1.Size = new System.Drawing.Size(902, 407);
             this.dataGridView1.TabIndex = 5;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             this.dataGridView1.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellValueChanged);
@@ -166,11 +168,20 @@ namespace WindowsFormsApp1
             this.loadtable.UseVisualStyleBackColor = true;
             this.loadtable.Click += new System.EventHandler(this.loadtable_Click);
             // 
+            // dataGridView2
+            // 
+            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView2.Location = new System.Drawing.Point(2, 474);
+            this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.Size = new System.Drawing.Size(902, 212);
+            this.dataGridView2.TabIndex = 8;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(904, 516);
+            this.ClientSize = new System.Drawing.Size(906, 688);
+            this.Controls.Add(this.dataGridView2);
             this.Controls.Add(this.loadtable);
             this.Controls.Add(this.delete);
             this.Controls.Add(this.dataGridView1);
@@ -183,6 +194,7 @@ namespace WindowsFormsApp1
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -220,6 +232,7 @@ namespace WindowsFormsApp1
         private DataGridViewTextBoxColumn clearance;
         private DataGridViewLinkColumn Picture;
         private Button loadtable;
+        private DataGridView dataGridView2;
     }
 }
 

@@ -24,8 +24,9 @@ namespace WindowsFormsApp1
         private void Form1_Load(object sender, EventArgs e)
         {
             Column1.Width = 350;
+            dataGridView2.ColumnHeadersVisible = false;
+            
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\Users\\Judy\\costcoapi.json");
-
 
         }
 
@@ -46,11 +47,10 @@ namespace WindowsFormsApp1
 
             }
 
-            if (!meat)
-            {
+
                 foreach (string line in text)
                 {
-                    if (!string.IsNullOrEmpty(line))
+                    if (!string.IsNullOrEmpty(line) && !meat)
                     {
                         // Serial - No current usage
                         var isNumeric = double.TryParse(line, out double n);
@@ -80,7 +80,7 @@ namespace WindowsFormsApp1
                     }
                     index++;
                 }
-            }
+            
 
             double discount = Math.Round(((initPrice - salePrice) / initPrice)*100,2);
             if (!Double.IsNaN(discount))
@@ -203,38 +203,67 @@ namespace WindowsFormsApp1
         }
 
         public async void loadtable_Click(object sender, EventArgs e)
-
-        //for (int i = 1; i <= 15; i++)
         {
-            // String name of the file.
-            string pic = "node92";
-            //string pic = "node" + i.ToString();
 
-            // Load and Save nodes as cropped images (.jpg file format)
-            if (File.Exists(pic + ".png"))
+            List<string> meats = new List<string>();
+            //for (int i = 1; i <= 15; i++)
             {
-                System.Drawing.Image img = System.Drawing.Image.FromFile(pic + ".png");
-                cropImage(img).Save(pic + ".jpg");
-                string[] text = await RequestGoogleVisionAsync(pic);
-                object[] result = parseDescription(text);
+                // String name of the file.
+                string pic = "node22";
+                //string pic = "node" + i.ToString();
 
-                // DEBUG WRITELINES
-                foreach (string s in text)
+                // Load and Save nodes as cropped images (.jpg file format)
+                if (File.Exists(pic + ".png"))
                 {
-                    Console.WriteLine(s);
+                    System.Drawing.Image img = System.Drawing.Image.FromFile(pic + ".png");
+                    cropImage(img).Save(pic + ".jpg");
+                    string[] text = await RequestGoogleVisionAsync(pic);
+                    object[] result = parseDescription(text);
+
+                    // DEBUG WRITELINES
+                    foreach (string s in text)
+                    {
+                        Console.WriteLine(s);
+                    }
+
+                    Console.WriteLine("Results: \n" + result[0]);
+                    //Console.WriteLine("Price: " + result[1]);
+                    //Console.WriteLine("Sale Price: " + result[2]);
+                    //Console.WriteLine("Discount: " + result[3]);
+                    //Console.WriteLine("Clearance: " + result[4]);
+                    //Console.WriteLine("Meat: " + result[5]);
+                    
+                    // ADD TO ROW
+                    if (!(bool)result[5])
+                    {
+                        dataGridView1.Rows.Add(removeInts(result[0].ToString()), result[2], result[1], result[3], result[4].ToString(), "click");
+                    }
+                    else
+                    {
+                        DataGridViewColumn col = new DataGridViewColumn();
+                        DataGridViewCell cell = new DataGridViewTextBoxCell();
+                        col.CellTemplate = cell;
+                        cell.Value = result[0].ToString();
+                        dataGridView2.Columns.Add(col);
+                        meats.Add(result[0].ToString());
+                        //Console.WriteLine("Judy is beautiful:" + result[0]);
+
+                    }
+
+
                 }
-
-                Console.WriteLine("Results: \n" + result[0]);
-                Console.WriteLine("Price: " + result[1]);
-                Console.WriteLine("Sale Price: " + result[2]);
-                Console.WriteLine("Clearance: " + result[3]);
-                Console.WriteLine("Meat: " + result[4]);
-
-                // ADD TO ROW
-
-                dataGridView1.Rows.Add(removeInts(result[0].ToString()), result[2], result[1], result[3], result[4].ToString(), "click");
-
             }
+            dataGridView2.Rows.Add();
+            int i = 0;
+            foreach (string meat in meats)
+            {
+                dataGridView2[i, 0].Value = meat;
+                i++;
+            }
+            
+
         }
+    
+
     }
 }
