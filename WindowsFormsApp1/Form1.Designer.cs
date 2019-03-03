@@ -48,6 +48,7 @@ namespace WindowsFormsApp1
             this.delete = new System.Windows.Forms.Button();
             this.loadtable = new System.Windows.Forms.Button();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.Meat = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
@@ -171,10 +172,19 @@ namespace WindowsFormsApp1
             // dataGridView2
             // 
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Meat});
             this.dataGridView2.Location = new System.Drawing.Point(2, 474);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.Size = new System.Drawing.Size(902, 212);
             this.dataGridView2.TabIndex = 8;
+            // 
+            // Meat
+            // 
+            this.Meat.HeaderText = "Meat";
+            this.Meat.Name = "Meat";
+            this.Meat.ReadOnly = true;
+            this.Meat.Width = 800;
             // 
             // Form1
             // 
@@ -233,6 +243,7 @@ namespace WindowsFormsApp1
         private DataGridViewLinkColumn Picture;
         private Button loadtable;
         private DataGridView dataGridView2;
+        private DataGridViewTextBoxColumn Meat;
     }
 }
 

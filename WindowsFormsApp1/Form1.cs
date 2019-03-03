@@ -25,8 +25,7 @@ namespace WindowsFormsApp1
         {
             Column1.Width = 350;
             dataGridView2.ColumnHeadersVisible = false;
-            
-            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\Users\\Judy\\costcoapi.json");
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "G:\\Users\\Martin\\Downloads\\costcoapi.json");
 
         }
 
@@ -50,7 +49,11 @@ namespace WindowsFormsApp1
 
                 foreach (string line in text)
                 {
-                    if (!string.IsNullOrEmpty(line) && !meat)
+                    // Meat case
+                    if (meat) itemName += " " + line;
+
+                    // All other cases
+                    else if (!string.IsNullOrEmpty(line) && !meat)
                     {
                         // Serial - No current usage
                         var isNumeric = double.TryParse(line, out double n);
@@ -227,11 +230,11 @@ namespace WindowsFormsApp1
                     }
 
                     Console.WriteLine("Results: \n" + result[0]);
-                    //Console.WriteLine("Price: " + result[1]);
-                    //Console.WriteLine("Sale Price: " + result[2]);
-                    //Console.WriteLine("Discount: " + result[3]);
-                    //Console.WriteLine("Clearance: " + result[4]);
-                    //Console.WriteLine("Meat: " + result[5]);
+                    Console.WriteLine("Price: " + result[1]);
+                    Console.WriteLine("Sale Price: " + result[2]);
+                    Console.WriteLine("Discount: " + result[3]);
+                    Console.WriteLine("Clearance: " + result[4]);
+                    Console.WriteLine("Meat: " + result[5]);
                     
                     // ADD TO ROW
                     if (!(bool)result[5])
@@ -240,25 +243,11 @@ namespace WindowsFormsApp1
                     }
                     else
                     {
-                        DataGridViewColumn col = new DataGridViewColumn();
-                        DataGridViewCell cell = new DataGridViewTextBoxCell();
-                        col.CellTemplate = cell;
-                        cell.Value = result[0].ToString();
-                        dataGridView2.Columns.Add(col);
-                        meats.Add(result[0].ToString());
-                        //Console.WriteLine("Judy is beautiful:" + result[0]);
-
+                        dataGridView2.Rows.Add(result[0].ToString());
                     }
 
 
                 }
-            }
-            dataGridView2.Rows.Add();
-            int i = 0;
-            foreach (string meat in meats)
-            {
-                dataGridView2[i, 0].Value = meat;
-                i++;
             }
             
 
