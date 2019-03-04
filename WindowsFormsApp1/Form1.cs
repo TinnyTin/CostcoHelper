@@ -25,7 +25,7 @@ namespace WindowsFormsApp1
         {
             Column1.Width = 350;
             dataGridView2.ColumnHeadersVisible = false;
-            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "G:\\Users\\Martin\\Downloads\\costcoapi.json");
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\Users\\Judy\\costcoapi.json");
 
         }
 
@@ -202,7 +202,22 @@ namespace WindowsFormsApp1
 
         private void delete_click(object sender, EventArgs e)
         {
-
+            for (int i = 1; i < 200; i++)
+                {
+                    if (File.Exists("node" + i.ToString() + ".png"))
+                    {
+                        if (File.Exists("node" + i.ToString() + ".jpg"))
+                        {
+                            File.Delete("node" + i.ToString() + ".png");
+                            File.Delete("node" + i.ToString() + ".jpg");
+                        }
+                        else
+                        {
+                            File.Delete("node" + i.ToString() + ".png");
+                        }
+                    }
+                }
+            
         }
 
         public async void loadtable_Click(object sender, EventArgs e)
