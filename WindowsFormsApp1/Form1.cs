@@ -224,11 +224,11 @@ namespace WindowsFormsApp1
         {
 
             List<string> meats = new List<string>();
-            //for (int i = 1; i <= 15; i++)
+            for (int i = 1; i <= 5; i++)
             {
                 // String name of the file.
-                string pic = "node22";
-                //string pic = "node" + i.ToString();
+                //string pic = "node22";
+                string pic = "node" + i.ToString();
 
                 // Load and Save nodes as cropped images (.jpg file format)
                 if (File.Exists(pic + ".png"))
@@ -258,7 +258,7 @@ namespace WindowsFormsApp1
                     }
                     else
                     {
-                        dataGridView2.Rows.Add(result[0].ToString());
+                        dataGridView2.Rows.Add(result[0].ToString(), "click");
                     }
 
 

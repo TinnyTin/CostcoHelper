@@ -49,6 +49,7 @@ namespace WindowsFormsApp1
             this.loadtable = new System.Windows.Forms.Button();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.Meat = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Image = new System.Windows.Forms.DataGridViewLinkColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
@@ -173,7 +174,8 @@ namespace WindowsFormsApp1
             // 
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Meat});
+            this.Meat,
+            this.Image});
             this.dataGridView2.Location = new System.Drawing.Point(2, 474);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.Size = new System.Drawing.Size(902, 212);
@@ -185,6 +187,11 @@ namespace WindowsFormsApp1
             this.Meat.Name = "Meat";
             this.Meat.ReadOnly = true;
             this.Meat.Width = 800;
+            // 
+            // Image
+            // 
+            this.Image.HeaderText = "Image";
+            this.Image.Name = "Image";
             // 
             // Form1
             // 
@@ -226,6 +233,22 @@ namespace WindowsFormsApp1
 
         }
 
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dataGridView2.CurrentCell.ColumnIndex.Equals(1) && e.RowIndex != -1)
+            {
+                if (dataGridView1.CurrentCell != null && dataGridView1.CurrentCell.Value != null)
+                {
+                    string row = (dataGridView2.CurrentCell.RowIndex + 1).ToString();
+                    string path = "J:\\Users\\Judy\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1\\bin\\Debug\\node" + row + ".jpg";
+                    Process.Start(path);
+                    Console.WriteLine(path.ToString());
+
+                }
+            }
+
+        }
+
         #endregion
 
         private System.Windows.Forms.Label label1;
@@ -244,6 +267,7 @@ namespace WindowsFormsApp1
         private Button loadtable;
         private DataGridView dataGridView2;
         private DataGridViewTextBoxColumn Meat;
+        private DataGridViewLinkColumn Image;
     }
 }
 
