@@ -57,12 +57,13 @@ namespace WindowsFormsApp1
         }
 
         int num = 1;
+        string path = "J:\\Users\\Judy\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1\\bin\\Debug\\";
 
         private void Form1_Load(object sender, EventArgs e)
         {
             Column1.Width = 350;
             dataGridView2.ColumnHeadersVisible = false;
-            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "G:\\Users\\Martin\\Downloads\\costcoapi.json");
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\Users\\Judy\\costcoapi.json");
 
         }
 
@@ -206,10 +207,10 @@ namespace WindowsFormsApp1
         }
 
         // HELPER
-        private async Task<string[]> RequestGoogleVisionAsync(string filename)
+        private async Task<string[]> RequestGoogleVisionAsync(string filepath)
         {
             ImageAnnotatorClient client = ImageAnnotatorClient.Create();
-            Google.Cloud.Vision.V1.Image image = Google.Cloud.Vision.V1.Image.FromFile(filename+".jpg");
+            Google.Cloud.Vision.V1.Image image = Google.Cloud.Vision.V1.Image.FromFile(filepath+ ".jpg");
             IReadOnlyList<EntityAnnotation> textAnnotations = await client.DetectTextAsync(image);
             string[] text = textAnnotations[0].Description.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
             return text;
@@ -256,7 +257,7 @@ namespace WindowsFormsApp1
             {
                 // String name of the file.
                 //string pic = "node22";
-                string pic = "node" + i.ToString();
+                string pic = path + "\\node" + i.ToString();
 
                 // Load and Save nodes as cropped images (.jpg file format)
                 if (File.Exists(pic + ".png"))
@@ -265,14 +266,14 @@ namespace WindowsFormsApp1
                     cropImage(img).Save(pic + ".jpg");
                     string[] text = await RequestGoogleVisionAsync(pic);
                     Item result = parseDescription(text);
-                    result.img = "G:\\Users\\Judy\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1\\bin\\Debug\\" + pic + ".jpg";
+                    result.img = pic + ".jpg";
                     // DEBUG WRITELINES
                     foreach (string s in text)
                     {
                         Console.WriteLine(s);
                     }
 
-                    //Console.WriteLine("Results: \n" + result.name);
+                       
                     //Console.WriteLine("Price: " + result.initprice);
                     //Console.WriteLine("Sale Price: " + result.saleprice);
                     //Console.WriteLine("Discount: " + result.discount);
@@ -282,7 +283,7 @@ namespace WindowsFormsApp1
                     // ADD TO ROW
                     if (!(bool)result.meat)
                     {
-                        dataGridView1.Rows.Add(removeInts(result.name), result.initprice, result.saleprice, result.discount, result.clearance, result.img);
+                         dataGridView1.Rows.Add(removeInts(result.name), result.initprice, result.saleprice, result.discount, result.clearance, result.img);
                     }
                     else
                     {

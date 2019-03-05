@@ -39,17 +39,17 @@ namespace WindowsFormsApp1
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.retrieve = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.delete = new System.Windows.Forms.Button();
+            this.loadtable = new System.Windows.Forms.Button();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.Meat = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Image = new System.Windows.Forms.DataGridViewLinkColumn();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clearance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Picture = new System.Windows.Forms.DataGridViewLinkColumn();
-            this.delete = new System.Windows.Forms.Button();
-            this.loadtable = new System.Windows.Forms.Button();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.Meat = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Image = new System.Windows.Forms.DataGridViewLinkColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
@@ -120,36 +120,6 @@ namespace WindowsFormsApp1
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             this.dataGridView1.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellValueChanged);
             // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "Name";
-            this.Column1.Name = "Column1";
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "Price";
-            this.Column2.Name = "Column2";
-            // 
-            // Column3
-            // 
-            this.Column3.HeaderText = "Original Price";
-            this.Column3.Name = "Column3";
-            // 
-            // Column4
-            // 
-            this.Column4.HeaderText = "Discount %";
-            this.Column4.Name = "Column4";
-            // 
-            // clearance
-            // 
-            this.clearance.HeaderText = "Clearance";
-            this.clearance.Name = "clearance";
-            // 
-            // Picture
-            // 
-            this.Picture.HeaderText = "Picture";
-            this.Picture.Name = "Picture";
-            // 
             // delete
             // 
             this.delete.Location = new System.Drawing.Point(804, 5);
@@ -192,6 +162,36 @@ namespace WindowsFormsApp1
             // 
             this.Image.HeaderText = "Image";
             this.Image.Name = "Image";
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Name";
+            this.Column1.Name = "Column1";
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "Original Price";
+            this.Column2.Name = "Column2";
+            // 
+            // Column3
+            // 
+            this.Column3.HeaderText = "Sale Price";
+            this.Column3.Name = "Column3";
+            // 
+            // Column4
+            // 
+            this.Column4.HeaderText = "Discount %";
+            this.Column4.Name = "Column4";
+            // 
+            // clearance
+            // 
+            this.clearance.HeaderText = "Clearance";
+            this.clearance.Name = "clearance";
+            // 
+            // Picture
+            // 
+            this.Picture.HeaderText = "Picture";
+            this.Picture.Name = "Picture";
             // 
             // Form1
             // 
@@ -257,16 +257,16 @@ namespace WindowsFormsApp1
         private System.Windows.Forms.Button retrieve;
         private System.Windows.Forms.DataGridView dataGridView1;
         private Button delete;
+        private Button loadtable;
+        private DataGridView dataGridView2;
+        private DataGridViewTextBoxColumn Meat;
+        private DataGridViewLinkColumn Image;
         private DataGridViewTextBoxColumn Column1;
         private DataGridViewTextBoxColumn Column2;
         private DataGridViewTextBoxColumn Column3;
         private DataGridViewTextBoxColumn Column4;
         private DataGridViewTextBoxColumn clearance;
         private DataGridViewLinkColumn Picture;
-        private Button loadtable;
-        private DataGridView dataGridView2;
-        private DataGridViewTextBoxColumn Meat;
-        private DataGridViewLinkColumn Image;
     }
 }
 
