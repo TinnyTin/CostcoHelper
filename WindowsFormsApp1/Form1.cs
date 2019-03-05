@@ -14,6 +14,43 @@ namespace WindowsFormsApp1
     public partial class Form1 : Form
     {
 
+        public class Item
+        {
+            public string name = "";
+            public double initprice = 0;
+            public double saleprice = 0;
+            public double discount = 0;
+            public bool clearance = false;
+            public bool meat = false;
+            public string img = "";
+
+            public Item(string name, double initprice, double saleprice, bool clearance, bool meat, string image)
+            {
+                this.name = name;
+                this.initprice = initprice;
+                this.saleprice = saleprice;
+                discount = calcDiscount(initprice, saleprice);
+                this.clearance = clearance;
+                this.meat = meat;
+                img = image;
+            }
+           
+            public double calcDiscount(double init, double sale)
+            {
+                double discount = Math.Round(((init - sale) / init) * 100, 2);
+                if (!Double.IsNaN(discount))
+                {
+                    Math.Round(discount, 2);
+                    if (discount == 100)
+                    {
+                        discount = 0;
+                    }
+                }
+                return discount;
+            }
+
+       }
+
         public Form1()
         {
             InitializeComponent();
@@ -25,12 +62,12 @@ namespace WindowsFormsApp1
         {
             Column1.Width = 350;
             dataGridView2.ColumnHeadersVisible = false;
-            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\Users\\Judy\\costcoapi.json");
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "G:\\Users\\Martin\\Downloads\\costcoapi.json");
 
         }
 
-        // Parses string[] into an object[4] with the resulting table data.
-        public object[] parseDescription(string[] text)
+        // Parses string[] into an Item with the resulting table data.
+        public Item parseDescription(string[] text)
         {
             int index = 1;
 
@@ -83,20 +120,13 @@ namespace WindowsFormsApp1
                     }
                     index++;
                 }
-            
 
-            double discount = Math.Round(((initPrice - salePrice) / initPrice)*100,2);
-            if (!Double.IsNaN(discount))
-            {
-                Math.Round(discount, 2);
-                if (discount == 100)
-                {
-                    discount = 0;
-                }
-            }
 
-            return new object[] { itemName, initPrice, salePrice, discount, clearance, meat };
+
+
+            return new Item(itemName, initPrice, salePrice, clearance,meat,"");
         }
+
 
         // Check if string is allcaps
         public bool IsAllUpper(string input)
@@ -222,8 +252,6 @@ namespace WindowsFormsApp1
 
         public async void loadtable_Click(object sender, EventArgs e)
         {
-
-            List<string> meats = new List<string>();
             for (int i = 1; i <= 5; i++)
             {
                 // String name of the file.
@@ -236,29 +264,29 @@ namespace WindowsFormsApp1
                     System.Drawing.Image img = System.Drawing.Image.FromFile(pic + ".png");
                     cropImage(img).Save(pic + ".jpg");
                     string[] text = await RequestGoogleVisionAsync(pic);
-                    object[] result = parseDescription(text);
-
+                    Item result = parseDescription(text);
+                    result.img = "G:\\Users\\Judy\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1\\bin\\Debug\\" + pic + ".jpg";
                     // DEBUG WRITELINES
                     foreach (string s in text)
                     {
                         Console.WriteLine(s);
                     }
 
-                    Console.WriteLine("Results: \n" + result[0]);
-                    Console.WriteLine("Price: " + result[1]);
-                    Console.WriteLine("Sale Price: " + result[2]);
-                    Console.WriteLine("Discount: " + result[3]);
-                    Console.WriteLine("Clearance: " + result[4]);
-                    Console.WriteLine("Meat: " + result[5]);
+                    //Console.WriteLine("Results: \n" + result.name);
+                    //Console.WriteLine("Price: " + result.initprice);
+                    //Console.WriteLine("Sale Price: " + result.saleprice);
+                    //Console.WriteLine("Discount: " + result.discount);
+                    //Console.WriteLine("Clearance: " + result.clearance);
+                    //Console.WriteLine("Meat: " + result.meat);
                     
                     // ADD TO ROW
-                    if (!(bool)result[5])
+                    if (!(bool)result.meat)
                     {
-                        dataGridView1.Rows.Add(removeInts(result[0].ToString()), result[2], result[1], result[3], result[4].ToString(), "click");
+                        dataGridView1.Rows.Add(removeInts(result.name), result.initprice, result.saleprice, result.discount, result.clearance, result.img);
                     }
                     else
                     {
-                        dataGridView2.Rows.Add(result[0].ToString(), "click");
+                        dataGridView2.Rows.Add(result.name, result.img);
                     }
 
 

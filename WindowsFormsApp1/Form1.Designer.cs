@@ -224,8 +224,7 @@ namespace WindowsFormsApp1
             {
                 if (dataGridView1.CurrentCell != null && dataGridView1.CurrentCell.Value != null)
                 {
-                    string row = (dataGridView1.CurrentCell.RowIndex + 1).ToString();
-                    string path = "J:\\Users\\Judy\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1\\bin\\Debug\\node" + row + ".jpg";
+                    string path = dataGridView1.CurrentCell.Value.ToString();
                     Process.Start(path);
                     Console.WriteLine(path.ToString());
                 }
