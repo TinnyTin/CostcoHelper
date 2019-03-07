@@ -58,12 +58,17 @@ namespace WindowsFormsApp1
 
         int num = 1;
         string path = "J:\\Users\\Judy\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1\\bin\\Debug\\";
+        string tinnypath = "C:\\Users\\Martin\\Source\\Repos\\judy-chen\\CostcoHelper\\WindowsFormsApp1\\bin\\Debug\\";
+        string credentials = "C:\\Users\\Judy\\costcoapi.json";
+        string tinnycredentials = "G:\\Users\\Martin\\Downloads\\costcoapi.json";
+
+
 
         private void Form1_Load(object sender, EventArgs e)
         {
             Column1.Width = 350;
             dataGridView2.ColumnHeadersVisible = false;
-            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\Users\\Judy\\costcoapi.json");
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", tinnycredentials);
 
         }
 
@@ -257,8 +262,7 @@ namespace WindowsFormsApp1
             {
                 // String name of the file.
                 //string pic = "node22";
-                string pic = path + "\\node" + i.ToString();
-
+                string pic = tinnypath + "node" + i.ToString();
                 // Load and Save nodes as cropped images (.jpg file format)
                 if (File.Exists(pic + ".png"))
                 {
