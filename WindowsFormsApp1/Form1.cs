@@ -14,7 +14,24 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
+        string credentials = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\CostcoHelper\\costcoapi.json";
+        string savedata = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\CostcoHelper\\savedata.txt";
+        string imagedata = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\CostcoHelper\\";
 
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            Column1.Width = 350;
+            dataGridView2.ColumnHeadersVisible = false;
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credentials);
+
+        }
+
+        // Item Class. Each Item represents row data in the table.
         public class Item
         {
             public string name = "";
@@ -52,25 +69,15 @@ namespace WindowsFormsApp1
 
         }
 
-        public Form1()
+        // WebClient Class for HTTP
+        class MyWebClient : WebClient
         {
-            InitializeComponent();
-        }
-
-        int num = 1;
-        string path = "C:\\Users\\Judy\\source\\repos\\judy-chen\\CostcoHelper\\WindowsFormsApp1\\bin\\Debug\\";
-        string tinnypath = "C:\\Users\\Martin\\Source\\Repos\\judy-chen\\CostcoHelper\\WindowsFormsApp1\\bin\\Debug\\";
-        string credentials = "C:\\Users\\Judy\\costcoapi.json";
-        string tinnycredentials = "G:\\Users\\Martin\\Downloads\\costcoapi.json";
-
-
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            Column1.Width = 350;
-            dataGridView2.ColumnHeadersVisible = false;
-            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credentials);
-
+            protected override WebRequest GetWebRequest(Uri address)
+            {
+                HttpWebRequest request = base.GetWebRequest(address) as HttpWebRequest;
+                request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+                return request;
+            }
         }
 
         // Parses string[] into an Item with the resulting table data.
@@ -134,28 +141,16 @@ namespace WindowsFormsApp1
             return new Item(itemName, initPrice, salePrice, clearance, meat, pic + ".png");
         }
 
-
-        // Check if string is allcaps
-        public bool IsAllUpper(string input)
-        {
-            for (int i = 0; i < input.Length; i++)
-            {
-                if (Char.IsLetter(input[i]) && !Char.IsUpper(input[i]))
-                    return false;
-            }
-            return true;
-        }
-
         // RETRIEVE ON CLICK
         private void retrieve_Click(object sender, EventArgs e)
         {
-            num = 1;
-
+            int num = 1;
             var data = new MyWebClient().DownloadString(textBox1.Text);
             var doc = new HtmlAgilityPack.HtmlDocument();
             doc.LoadHtml(data);
             var htmlNodeList = doc.DocumentNode.SelectNodes("//dt[@class='gallery-icon landscape']");
             var nodeList = new List<string>();
+            string folder = parseDate(textBox1.Text);
 
             foreach (var node in htmlNodeList)
             {
@@ -169,34 +164,37 @@ namespace WindowsFormsApp1
             Console.WriteLine(nodeList[1]);
 
 
+            FileInfo fileInfo = new FileInfo(imagedata + folder);
+            if (!fileInfo.Exists)
+            {
+                Directory.CreateDirectory(fileInfo.Directory.FullName);
+                File.Create(savedata).Dispose();
+            }
+
             foreach (string node in nodeList)
             {
                 using (WebClient webClient = new WebClient())
                 {
-                    webClient.DownloadFile(node, "node" + num.ToString() + ".png");
+                    webClient.DownloadFile(node, imagedata + folder + "node" + num.ToString() + ".png");
                     num++;
                 }
             }
 
-
-
-
-            //for (int i = 1; i <= 2; i++)
-            //{
-            //    // String name of the file.
-            //    string pic = "node" + i.ToString();
-
-            //    // Load and Save nodes as cropped images (.jpg file format)
-            //    if (File.Exists(pic + ".png"))
-            //    {
-
-
-            //    }
-            //}
-            // authexplicit("favorable - valor - 224609", "c:\\users\\judy\\costcoapi.json");
-
+            MessageBox.Show("Download Complete");
         }
 
+        // Check if string is allcaps
+        public bool IsAllUpper(string input)
+        {
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (Char.IsLetter(input[i]) && !Char.IsUpper(input[i]))
+                    return false;
+            }
+            return true;
+        }
+
+        // Removes all numerical integers from a string
         public string removeInts(string title)
         {
             title = title.Trim(new Char[] { '"' });
@@ -204,6 +202,21 @@ namespace WindowsFormsApp1
             Console.WriteLine(title);
             return title;
         }
+
+
+        // Returns the date represented as a simple string given a http url
+        public string parseDate(string url)
+        {
+            string result = "";
+            string[] splitURL = url.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string s in splitURL)
+            {
+                var isNumeric = int.TryParse(s, out int i);
+                if (isNumeric) result += s;
+            }
+            return result + "\\";
+        }
+
         // Crop a given image and return it.
         public Bitmap cropImage(System.Drawing.Image img)
         {
@@ -212,7 +225,7 @@ namespace WindowsFormsApp1
             return bmpCrop;
         }
 
-        // HELPER
+        // Requests Google Vision to process the image
         private async Task<string[]> RequestGoogleVisionAsync(string filepath)
         {
             ImageAnnotatorClient client = ImageAnnotatorClient.Create();
@@ -222,82 +235,19 @@ namespace WindowsFormsApp1
             return text;
         }
 
-        class MyWebClient : WebClient
-        {
-            protected override WebRequest GetWebRequest(Uri address)
-            {
-                HttpWebRequest request = base.GetWebRequest(address) as HttpWebRequest;
-                request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
-                return request;
-            }
-        }
-
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             Console.WriteLine(e.GetType());
         }
 
-        private void delete_click(object sender, EventArgs e)
-        {
-            for (int i = 1; i < 200; i++)
-            {
-                if (File.Exists("node" + i.ToString() + ".png"))
-                {
-                    if (File.Exists("node" + i.ToString() + ".jpg"))
-                    {
-                        File.Delete("node" + i.ToString() + ".png");
-                        File.Delete("node" + i.ToString() + ".jpg");
-                    }
-                    else
-                    {
-                        File.Delete("node" + i.ToString() + ".png");
-                    }
-                }
-            }
-
-        }
-
+        // Parses and organizes the data from Google Vision in to the table categories.
         public async void parsetable_Click(object sender, EventArgs e)
         {
-
-            DataTable dt1 = new DataTable();
-            DataColumn dc1 = new DataColumn("Name");
-            DataColumn dc2 = new DataColumn("Original Price");
-            DataColumn dc3 = new DataColumn("Sale price");
-            DataColumn dc4 = new DataColumn("Discount %");
-            DataColumn dc5 = new DataColumn("Clearance");
-            DataColumn dc6 = new DataColumn("Picture");
-            dt1.Columns.Add(dc1);
-            dt1.Columns.Add(dc2);
-            dt1.Columns.Add(dc3);
-            dt1.Columns.Add(dc4);
-            dt1.Columns.Add(dc5);
-            dt1.Columns.Add(dc6);
-            DataTable dt2 = new DataTable();
-            DataColumn dc11 = new DataColumn("Name2");
-            DataColumn dc22 = new DataColumn("Original Price2");
-            DataColumn dc33 = new DataColumn("Sale price2");
-            DataColumn dc44 = new DataColumn("Discount %2");
-            DataColumn dc55 = new DataColumn("Clearance2");
-            DataColumn dc66 = new DataColumn("Picture2");
-            dt2.Columns.Add(dc11);
-            dt2.Columns.Add(dc22);
-            dt2.Columns.Add(dc33);
-            dt2.Columns.Add(dc44);
-            dt2.Columns.Add(dc55);
-            dt2.Columns.Add(dc66);
-
-            DataSet ds1 = new DataSet();
-            DataSet ds2 = new DataSet();
-            BindingSource bindingSource1 = new BindingSource();
-
-
 
             for (int i = 1; i <= 5; i++)
             {
                 // String name of the file.
-                //string pic = "node22";
-                string pic = path + "node" + i.ToString();
+                string pic = imagedata + "node" + i.ToString();
                 // Load and Save nodes as cropped images (.jpg file format)
                 if (File.Exists(pic + ".png"))
                 {
@@ -305,18 +255,6 @@ namespace WindowsFormsApp1
                     cropImage(image).Save(pic + ".jpg");
                     string[] text = await RequestGoogleVisionAsync(pic);
                     Item result = parseDescription(text, pic);
-                    // DEBUG WRITELINES
-                    foreach (string s in text)
-                    {
-                        Console.WriteLine(s);
-                    }
-
-                    //Console.WriteLine("Price: " + result.initprice);
-                    //Console.WriteLine("Sale Price: " + result.saleprice);
-                    //Console.WriteLine("Discount: " + result.discount);
-                    //Console.WriteLine("Clearance: " + result.clearance);
-                    //Console.WriteLine("Meat: " + result.meat);
-                    //Console.WriteLine("Meat: " + result.img);
 
                     // ADD TO ROW
                     if (!(bool)result.meat && !(result.saleprice == 0 && !result.clearance))
@@ -327,47 +265,52 @@ namespace WindowsFormsApp1
                     {
                         dataGridView2.Rows.Add(result.name, result.img);
                     }
-
-
-
                 }
             }
 
-
-
         }
 
-        private void save_Click(object sender, EventArgs e)
-        {
-            string path = "C:\\Users\\Judy\\source\\repos\\judy-chen\\CostcoHelper\\WindowsFormsApp1\\bin\\Debug\\datagridview1.txt";
-            using (TextWriter tw = new StreamWriter(path))
-                for (int i = 0; i < dataGridView1.RowCount - 2; i++)
-                {
-                    for (int j = 0; j < dataGridView1.ColumnCount - 1; j++)
-                    {
-                        tw.WriteLine(dataGridView1.Rows[i].Cells[j].Value.ToString() + ';');
-                    }
-                    tw.WriteLine('\n');
-                }
-
-
-
-
-
-
-        }
-
+    
+        // Loads table according to data parsed from savedata.txt
         private void loadsaved_Click(object sender, EventArgs e)
         {
-            //string path = "C:\\Users\\Judy\\source\\repos\\judy-chen\\CostcoHelper\\WindowsFormsApp1\\bin\\Debug\\datagridview1.txt";
-            //StreamReader reader = File.OpenText(path);
-            //string line;
-            //while ((line = reader.ReadLine()) != null)
-            //{
-            //    string[] res = line.Split(';');
-            //    dataGridView1.Rows.Add(res[0], res[1], res[2], res[3], res[4], result.img);
+            
+            StreamReader reader = File.OpenText(savedata);
+            string line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                string[] res = line.Split(';');
+                dataGridView1.Rows.Add(res[0], res[1], res[2], res[3], res[4], res[5]);
 
-            //}
+            }
+            reader.Close();
+        }
+
+        // Save current table data when application closes
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            FileInfo fileInfo = new FileInfo(savedata);
+            if (!fileInfo.Exists)
+            {
+                Directory.CreateDirectory(fileInfo.Directory.FullName);
+                File.Create(savedata).Dispose();
+            }
+            using (TextWriter tw = new StreamWriter(savedata))
+            {
+                for (int i = 0; i <= dataGridView1.RowCount - 2; i++)
+                {
+                    for (int j = 0; j <= dataGridView1.ColumnCount - 1; j++)
+                    {
+                        tw.Write(dataGridView1.Rows[i].Cells[j].Value.ToString() + ';');
+                    }
+                    tw.WriteLine();
+                }
+            }
+        }
+
+        private void Folder_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(@imagedata);
         }
     }
 }

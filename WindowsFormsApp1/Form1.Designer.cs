@@ -45,12 +45,11 @@ namespace WindowsFormsApp1
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clearance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Picture = new System.Windows.Forms.DataGridViewLinkColumn();
-            this.delete = new System.Windows.Forms.Button();
+            this.Folder = new System.Windows.Forms.Button();
             this.parsetable = new System.Windows.Forms.Button();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.Meat = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Image = new System.Windows.Forms.DataGridViewLinkColumn();
-            this.save = new System.Windows.Forms.Button();
             this.loadsaved = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
@@ -152,23 +151,23 @@ namespace WindowsFormsApp1
             this.Picture.HeaderText = "Picture";
             this.Picture.Name = "Picture";
             // 
-            // delete
+            // Folder
             // 
-            this.delete.Location = new System.Drawing.Point(804, 5);
-            this.delete.Name = "delete";
-            this.delete.Size = new System.Drawing.Size(78, 24);
-            this.delete.TabIndex = 6;
-            this.delete.Text = "Delete Files";
-            this.delete.UseVisualStyleBackColor = true;
-            this.delete.Click += new System.EventHandler(this.delete_click);
+            this.Folder.Location = new System.Drawing.Point(804, 5);
+            this.Folder.Name = "Folder";
+            this.Folder.Size = new System.Drawing.Size(78, 24);
+            this.Folder.TabIndex = 6;
+            this.Folder.Text = "Open Folder";
+            this.Folder.UseVisualStyleBackColor = true;
+            this.Folder.Click += new System.EventHandler(this.Folder_Click);
             // 
             // parsetable
             // 
-            this.parsetable.Location = new System.Drawing.Point(723, 32);
+            this.parsetable.Location = new System.Drawing.Point(689, 32);
             this.parsetable.Name = "parsetable";
-            this.parsetable.Size = new System.Drawing.Size(75, 26);
+            this.parsetable.Size = new System.Drawing.Size(109, 26);
             this.parsetable.TabIndex = 7;
-            this.parsetable.Text = "Parse Table";
+            this.parsetable.Text = "Populate Table";
             this.parsetable.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.parsetable.UseVisualStyleBackColor = true;
             this.parsetable.Click += new System.EventHandler(this.parsetable_Click);
@@ -196,20 +195,10 @@ namespace WindowsFormsApp1
             this.Image.HeaderText = "Image";
             this.Image.Name = "Image";
             // 
-            // save
-            // 
-            this.save.Location = new System.Drawing.Point(804, 32);
-            this.save.Name = "save";
-            this.save.Size = new System.Drawing.Size(78, 26);
-            this.save.TabIndex = 9;
-            this.save.Text = "Save Table";
-            this.save.UseVisualStyleBackColor = true;
-            this.save.Click += new System.EventHandler(this.save_Click);
-            // 
             // loadsaved
             // 
             this.loadsaved.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
-            this.loadsaved.Location = new System.Drawing.Point(616, 32);
+            this.loadsaved.Location = new System.Drawing.Point(803, 32);
             this.loadsaved.Name = "loadsaved";
             this.loadsaved.Size = new System.Drawing.Size(91, 26);
             this.loadsaved.TabIndex = 10;
@@ -223,10 +212,9 @@ namespace WindowsFormsApp1
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(906, 688);
             this.Controls.Add(this.loadsaved);
-            this.Controls.Add(this.save);
             this.Controls.Add(this.dataGridView2);
             this.Controls.Add(this.parsetable);
-            this.Controls.Add(this.delete);
+            this.Controls.Add(this.Folder);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.retrieve);
             this.Controls.Add(this.textBox1);
@@ -235,6 +223,7 @@ namespace WindowsFormsApp1
             this.Controls.Add(this.label1);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
@@ -282,7 +271,7 @@ namespace WindowsFormsApp1
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button retrieve;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private Button delete;
+        private Button Folder;
         private Button parsetable;
         private DataGridView dataGridView2;
         private DataGridViewTextBoxColumn Meat;
@@ -293,7 +282,6 @@ namespace WindowsFormsApp1
         private DataGridViewTextBoxColumn Column4;
         private DataGridViewTextBoxColumn clearance;
         private DataGridViewLinkColumn Picture;
-        private Button save;
         private Button loadsaved;
     }
 }
