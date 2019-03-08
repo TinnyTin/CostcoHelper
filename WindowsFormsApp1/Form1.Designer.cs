@@ -39,17 +39,19 @@ namespace WindowsFormsApp1
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.retrieve = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.delete = new System.Windows.Forms.Button();
-            this.loadtable = new System.Windows.Forms.Button();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.Meat = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Image = new System.Windows.Forms.DataGridViewLinkColumn();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clearance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Picture = new System.Windows.Forms.DataGridViewLinkColumn();
+            this.delete = new System.Windows.Forms.Button();
+            this.parsetable = new System.Windows.Forms.Button();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.Meat = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Image = new System.Windows.Forms.DataGridViewLinkColumn();
+            this.save = new System.Windows.Forms.Button();
+            this.loadsaved = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
@@ -95,7 +97,7 @@ namespace WindowsFormsApp1
             // retrieve
             // 
             this.retrieve.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.retrieve.Location = new System.Drawing.Point(713, 5);
+            this.retrieve.Location = new System.Drawing.Point(723, 6);
             this.retrieve.Name = "retrieve";
             this.retrieve.Size = new System.Drawing.Size(75, 23);
             this.retrieve.TabIndex = 4;
@@ -119,49 +121,6 @@ namespace WindowsFormsApp1
             this.dataGridView1.TabIndex = 5;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             this.dataGridView1.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellValueChanged);
-            // 
-            // delete
-            // 
-            this.delete.Location = new System.Drawing.Point(804, 5);
-            this.delete.Name = "delete";
-            this.delete.Size = new System.Drawing.Size(78, 23);
-            this.delete.TabIndex = 6;
-            this.delete.Text = "Delete Files";
-            this.delete.UseVisualStyleBackColor = true;
-            this.delete.Click += new System.EventHandler(this.delete_click);
-            // 
-            // loadtable
-            // 
-            this.loadtable.Location = new System.Drawing.Point(713, 32);
-            this.loadtable.Name = "loadtable";
-            this.loadtable.Size = new System.Drawing.Size(88, 26);
-            this.loadtable.TabIndex = 7;
-            this.loadtable.Text = "Load Table";
-            this.loadtable.UseVisualStyleBackColor = true;
-            this.loadtable.Click += new System.EventHandler(this.loadtable_Click);
-            // 
-            // dataGridView2
-            // 
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Meat,
-            this.Image});
-            this.dataGridView2.Location = new System.Drawing.Point(2, 474);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(902, 212);
-            this.dataGridView2.TabIndex = 8;
-            // 
-            // Meat
-            // 
-            this.Meat.HeaderText = "Meat";
-            this.Meat.Name = "Meat";
-            this.Meat.ReadOnly = true;
-            this.Meat.Width = 800;
-            // 
-            // Image
-            // 
-            this.Image.HeaderText = "Image";
-            this.Image.Name = "Image";
             // 
             // Column1
             // 
@@ -193,13 +152,80 @@ namespace WindowsFormsApp1
             this.Picture.HeaderText = "Picture";
             this.Picture.Name = "Picture";
             // 
+            // delete
+            // 
+            this.delete.Location = new System.Drawing.Point(804, 5);
+            this.delete.Name = "delete";
+            this.delete.Size = new System.Drawing.Size(78, 24);
+            this.delete.TabIndex = 6;
+            this.delete.Text = "Delete Files";
+            this.delete.UseVisualStyleBackColor = true;
+            this.delete.Click += new System.EventHandler(this.delete_click);
+            // 
+            // parsetable
+            // 
+            this.parsetable.Location = new System.Drawing.Point(723, 32);
+            this.parsetable.Name = "parsetable";
+            this.parsetable.Size = new System.Drawing.Size(75, 26);
+            this.parsetable.TabIndex = 7;
+            this.parsetable.Text = "Parse Table";
+            this.parsetable.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.parsetable.UseVisualStyleBackColor = true;
+            this.parsetable.Click += new System.EventHandler(this.parsetable_Click);
+            // 
+            // dataGridView2
+            // 
+            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Meat,
+            this.Image});
+            this.dataGridView2.Location = new System.Drawing.Point(2, 474);
+            this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.Size = new System.Drawing.Size(902, 212);
+            this.dataGridView2.TabIndex = 8;
+            // 
+            // Meat
+            // 
+            this.Meat.HeaderText = "Meat";
+            this.Meat.Name = "Meat";
+            this.Meat.ReadOnly = true;
+            this.Meat.Width = 800;
+            // 
+            // Image
+            // 
+            this.Image.HeaderText = "Image";
+            this.Image.Name = "Image";
+            // 
+            // save
+            // 
+            this.save.Location = new System.Drawing.Point(804, 32);
+            this.save.Name = "save";
+            this.save.Size = new System.Drawing.Size(78, 26);
+            this.save.TabIndex = 9;
+            this.save.Text = "Save Table";
+            this.save.UseVisualStyleBackColor = true;
+            this.save.Click += new System.EventHandler(this.save_Click);
+            // 
+            // loadsaved
+            // 
+            this.loadsaved.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
+            this.loadsaved.Location = new System.Drawing.Point(616, 32);
+            this.loadsaved.Name = "loadsaved";
+            this.loadsaved.Size = new System.Drawing.Size(91, 26);
+            this.loadsaved.TabIndex = 10;
+            this.loadsaved.Text = "Load Saved Table";
+            this.loadsaved.UseVisualStyleBackColor = true;
+            this.loadsaved.Click += new System.EventHandler(this.loadsaved_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(906, 688);
+            this.Controls.Add(this.loadsaved);
+            this.Controls.Add(this.save);
             this.Controls.Add(this.dataGridView2);
-            this.Controls.Add(this.loadtable);
+            this.Controls.Add(this.parsetable);
             this.Controls.Add(this.delete);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.retrieve);
@@ -239,7 +265,7 @@ namespace WindowsFormsApp1
                 if (dataGridView1.CurrentCell != null && dataGridView1.CurrentCell.Value != null)
                 {
                     string row = (dataGridView2.CurrentCell.RowIndex + 1).ToString();
-                    string path = "J:\\Users\\Judy\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1\\bin\\Debug\\node" + row + ".jpg";
+                    string path = "C:\\Users\\Judy\\source\\repos\\judy-chen\\CostcoHelper\\WindowsFormsApp1\\bin\\Debug\\" + row + ".png";
                     Process.Start(path);
                     Console.WriteLine(path.ToString());
 
@@ -257,7 +283,7 @@ namespace WindowsFormsApp1
         private System.Windows.Forms.Button retrieve;
         private System.Windows.Forms.DataGridView dataGridView1;
         private Button delete;
-        private Button loadtable;
+        private Button parsetable;
         private DataGridView dataGridView2;
         private DataGridViewTextBoxColumn Meat;
         private DataGridViewLinkColumn Image;
@@ -267,6 +293,8 @@ namespace WindowsFormsApp1
         private DataGridViewTextBoxColumn Column4;
         private DataGridViewTextBoxColumn clearance;
         private DataGridViewLinkColumn Picture;
+        private Button save;
+        private Button loadsaved;
     }
 }
 

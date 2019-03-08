@@ -8,6 +8,7 @@ using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using System.Data;
 
 namespace WindowsFormsApp1
 {
@@ -34,7 +35,7 @@ namespace WindowsFormsApp1
                 this.meat = meat;
                 img = image;
             }
-           
+
             public double calcDiscount(double init, double sale)
             {
                 double discount = Math.Round(((init - sale) / init) * 100, 2);
@@ -49,7 +50,7 @@ namespace WindowsFormsApp1
                 return discount;
             }
 
-       }
+        }
 
         public Form1()
         {
@@ -57,7 +58,7 @@ namespace WindowsFormsApp1
         }
 
         int num = 1;
-        string path = "J:\\Users\\Judy\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1\\bin\\Debug\\";
+        string path = "C:\\Users\\Judy\\source\\repos\\judy-chen\\CostcoHelper\\WindowsFormsApp1\\bin\\Debug\\";
         string tinnypath = "C:\\Users\\Martin\\Source\\Repos\\judy-chen\\CostcoHelper\\WindowsFormsApp1\\bin\\Debug\\";
         string credentials = "C:\\Users\\Judy\\costcoapi.json";
         string tinnycredentials = "G:\\Users\\Martin\\Downloads\\costcoapi.json";
@@ -68,12 +69,12 @@ namespace WindowsFormsApp1
         {
             Column1.Width = 350;
             dataGridView2.ColumnHeadersVisible = false;
-            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", tinnycredentials);
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credentials);
 
         }
 
         // Parses string[] into an Item with the resulting table data.
-        public Item parseDescription(string[] text)
+        public Item parseDescription(string[] text, string pic)
         {
             int index = 1;
 
@@ -90,47 +91,47 @@ namespace WindowsFormsApp1
             }
 
 
-                foreach (string line in text)
+            foreach (string line in text)
+            {
+                // Meat case
+                if (meat) itemName += " " + line;
+
+                // All other cases
+                else if (!string.IsNullOrEmpty(line) && !meat)
                 {
-                    // Meat case
-                    if (meat) itemName += " " + line;
+                    // Serial - No current usage
+                    var isNumeric = double.TryParse(line, out double n);
+                    //if (isNumeric && index == 1) serial = line.Trim();
+                    // Item Name 
+                    if (index < 5 && IsAllUpper(line) && !isNumeric) itemName += " " + line;
 
-                    // All other cases
-                    else if (!string.IsNullOrEmpty(line) && !meat)
+                    else if (line.Contains(".") && !clearance)
                     {
-                        // Serial - No current usage
-                        var isNumeric = double.TryParse(line, out double n);
-                        //if (isNumeric && index == 1) serial = line.Trim();
-                        // Item Name 
-                        if (index < 5 && IsAllUpper(line) && !isNumeric) itemName += " " + line;
-
-                        else if (line.Contains(".") && !clearance)
+                        var isDouble = double.TryParse(line, out double d);
+                        if (isDouble)
                         {
-                            var isDouble = double.TryParse(line, out double d);
-                            if (isDouble)
+                            double amnt = Convert.ToDouble(line);
+
+                            // Clearance
+                            if (line.Last() == '7')
                             {
-                                double amnt = Convert.ToDouble(line);
-
-                                // Clearance
-                                if (line.Last() == '7')
-                                {
-                                    initPrice = amnt;
-                                    clearance = true;
-                                }
-
-                                // InitialPrice Discount and SalePrice
-                                else if (amnt > initPrice) initPrice = amnt;
-                                else if (amnt > (initPrice * 0.5)) salePrice = amnt;
+                                initPrice = amnt;
+                                clearance = true;
                             }
+
+                            // InitialPrice Discount and SalePrice
+                            else if (amnt > initPrice) initPrice = amnt;
+                            else if (amnt > (initPrice * 0.5)) salePrice = amnt;
                         }
                     }
-                    index++;
                 }
+                index++;
+            }
 
 
 
 
-            return new Item(itemName, initPrice, salePrice, clearance,meat,"");
+            return new Item(itemName, initPrice, salePrice, clearance, meat, pic + ".png");
         }
 
 
@@ -167,7 +168,7 @@ namespace WindowsFormsApp1
             var link = htmlNodeList[0].GetAttributeValue("src", "not found");
             Console.WriteLine(nodeList[1]);
 
-            
+
             foreach (string node in nodeList)
             {
                 using (WebClient webClient = new WebClient())
@@ -177,8 +178,8 @@ namespace WindowsFormsApp1
                 }
             }
 
-            
-            
+
+
 
             //for (int i = 1; i <= 2; i++)
             //{
@@ -188,11 +189,11 @@ namespace WindowsFormsApp1
             //    // Load and Save nodes as cropped images (.jpg file format)
             //    if (File.Exists(pic + ".png"))
             //    {
-                    
+
 
             //    }
             //}
-// authexplicit("favorable - valor - 224609", "c:\\users\\judy\\costcoapi.json");
+            // authexplicit("favorable - valor - 224609", "c:\\users\\judy\\costcoapi.json");
 
         }
 
@@ -215,7 +216,7 @@ namespace WindowsFormsApp1
         private async Task<string[]> RequestGoogleVisionAsync(string filepath)
         {
             ImageAnnotatorClient client = ImageAnnotatorClient.Create();
-            Google.Cloud.Vision.V1.Image image = Google.Cloud.Vision.V1.Image.FromFile(filepath+ ".jpg");
+            Google.Cloud.Vision.V1.Image image = Google.Cloud.Vision.V1.Image.FromFile(filepath + ".jpg");
             IReadOnlyList<EntityAnnotation> textAnnotations = await client.DetectTextAsync(image);
             string[] text = textAnnotations[0].Description.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
             return text;
@@ -239,55 +240,88 @@ namespace WindowsFormsApp1
         private void delete_click(object sender, EventArgs e)
         {
             for (int i = 1; i < 200; i++)
+            {
+                if (File.Exists("node" + i.ToString() + ".png"))
                 {
-                    if (File.Exists("node" + i.ToString() + ".png"))
+                    if (File.Exists("node" + i.ToString() + ".jpg"))
                     {
-                        if (File.Exists("node" + i.ToString() + ".jpg"))
-                        {
-                            File.Delete("node" + i.ToString() + ".png");
-                            File.Delete("node" + i.ToString() + ".jpg");
-                        }
-                        else
-                        {
-                            File.Delete("node" + i.ToString() + ".png");
-                        }
+                        File.Delete("node" + i.ToString() + ".png");
+                        File.Delete("node" + i.ToString() + ".jpg");
+                    }
+                    else
+                    {
+                        File.Delete("node" + i.ToString() + ".png");
                     }
                 }
-            
+            }
+
         }
 
-        public async void loadtable_Click(object sender, EventArgs e)
+        public async void parsetable_Click(object sender, EventArgs e)
         {
+
+            DataTable dt1 = new DataTable();
+            DataColumn dc1 = new DataColumn("Name");
+            DataColumn dc2 = new DataColumn("Original Price");
+            DataColumn dc3 = new DataColumn("Sale price");
+            DataColumn dc4 = new DataColumn("Discount %");
+            DataColumn dc5 = new DataColumn("Clearance");
+            DataColumn dc6 = new DataColumn("Picture");
+            dt1.Columns.Add(dc1);
+            dt1.Columns.Add(dc2);
+            dt1.Columns.Add(dc3);
+            dt1.Columns.Add(dc4);
+            dt1.Columns.Add(dc5);
+            dt1.Columns.Add(dc6);
+            DataTable dt2 = new DataTable();
+            DataColumn dc11 = new DataColumn("Name2");
+            DataColumn dc22 = new DataColumn("Original Price2");
+            DataColumn dc33 = new DataColumn("Sale price2");
+            DataColumn dc44 = new DataColumn("Discount %2");
+            DataColumn dc55 = new DataColumn("Clearance2");
+            DataColumn dc66 = new DataColumn("Picture2");
+            dt2.Columns.Add(dc11);
+            dt2.Columns.Add(dc22);
+            dt2.Columns.Add(dc33);
+            dt2.Columns.Add(dc44);
+            dt2.Columns.Add(dc55);
+            dt2.Columns.Add(dc66);
+
+            DataSet ds1 = new DataSet();
+            DataSet ds2 = new DataSet();
+            BindingSource bindingSource1 = new BindingSource();
+
+
+
             for (int i = 1; i <= 5; i++)
             {
                 // String name of the file.
                 //string pic = "node22";
-                string pic = tinnypath + "node" + i.ToString();
+                string pic = path + "node" + i.ToString();
                 // Load and Save nodes as cropped images (.jpg file format)
                 if (File.Exists(pic + ".png"))
                 {
-                    System.Drawing.Image img = System.Drawing.Image.FromFile(pic + ".png");
-                    cropImage(img).Save(pic + ".jpg");
+                    System.Drawing.Image image = System.Drawing.Image.FromFile(pic + ".png");
+                    cropImage(image).Save(pic + ".jpg");
                     string[] text = await RequestGoogleVisionAsync(pic);
-                    Item result = parseDescription(text);
-                    result.img = pic + ".jpg";
+                    Item result = parseDescription(text, pic);
                     // DEBUG WRITELINES
                     foreach (string s in text)
                     {
                         Console.WriteLine(s);
                     }
 
-                       
                     //Console.WriteLine("Price: " + result.initprice);
                     //Console.WriteLine("Sale Price: " + result.saleprice);
                     //Console.WriteLine("Discount: " + result.discount);
                     //Console.WriteLine("Clearance: " + result.clearance);
                     //Console.WriteLine("Meat: " + result.meat);
-                    
+                    //Console.WriteLine("Meat: " + result.img);
+
                     // ADD TO ROW
-                    if (!(bool)result.meat)
+                    if (!(bool)result.meat && !(result.saleprice == 0 && !result.clearance))
                     {
-                         dataGridView1.Rows.Add(removeInts(result.name), result.initprice, result.saleprice, result.discount, result.clearance, result.img);
+                        dataGridView1.Rows.Add(removeInts(result.name), result.initprice, result.saleprice, result.discount, result.clearance, result.img);
                     }
                     else
                     {
@@ -295,12 +329,45 @@ namespace WindowsFormsApp1
                     }
 
 
+
                 }
             }
-            
+
+
 
         }
-    
 
+        private void save_Click(object sender, EventArgs e)
+        {
+            string path = "C:\\Users\\Judy\\source\\repos\\judy-chen\\CostcoHelper\\WindowsFormsApp1\\bin\\Debug\\datagridview1.txt";
+            using (TextWriter tw = new StreamWriter(path))
+                for (int i = 0; i < dataGridView1.RowCount - 2; i++)
+                {
+                    for (int j = 0; j < dataGridView1.ColumnCount - 1; j++)
+                    {
+                        tw.WriteLine(dataGridView1.Rows[i].Cells[j].Value.ToString() + ';');
+                    }
+                    tw.WriteLine('\n');
+                }
+
+
+
+
+
+
+        }
+
+        private void loadsaved_Click(object sender, EventArgs e)
+        {
+            //string path = "C:\\Users\\Judy\\source\\repos\\judy-chen\\CostcoHelper\\WindowsFormsApp1\\bin\\Debug\\datagridview1.txt";
+            //StreamReader reader = File.OpenText(path);
+            //string line;
+            //while ((line = reader.ReadLine()) != null)
+            //{
+            //    string[] res = line.Split(';');
+            //    dataGridView1.Rows.Add(res[0], res[1], res[2], res[3], res[4], result.img);
+
+            //}
+        }
     }
 }
