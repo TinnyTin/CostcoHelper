@@ -14,9 +14,10 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
-        string credentials = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\CostcoHelper\\costcoapi.json";
-        string savedata = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\CostcoHelper\\savedata.txt";
-        string imagedata = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\CostcoHelper\\";
+        static string directory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\CostcoHelper";
+        string credentials = directory + "\\costcoapi.json";
+        string savedata = directory + "\\savedata.txt";
+        string folder = "";
 
         public Form1()
         {
@@ -144,13 +145,15 @@ namespace WindowsFormsApp1
         // RETRIEVE ON CLICK
         private void retrieve_Click(object sender, EventArgs e)
         {
+
             int num = 1;
             var data = new MyWebClient().DownloadString(textBox1.Text);
             var doc = new HtmlAgilityPack.HtmlDocument();
             doc.LoadHtml(data);
             var htmlNodeList = doc.DocumentNode.SelectNodes("//dt[@class='gallery-icon landscape']");
             var nodeList = new List<string>();
-            string folder = parseDate(textBox1.Text);
+            folder = parseDate(textBox1.Text);
+            
 
             foreach (var node in htmlNodeList)
             {
@@ -161,26 +164,26 @@ namespace WindowsFormsApp1
                 }
             }
             var link = htmlNodeList[0].GetAttributeValue("src", "not found");
-            Console.WriteLine(nodeList[1]);
 
-
-            FileInfo fileInfo = new FileInfo(imagedata + folder);
+            // Check if directory exists
+            FileInfo fileInfo = new FileInfo(directory + "\\" + folder + "\\node1.png");
             if (!fileInfo.Exists)
             {
                 Directory.CreateDirectory(fileInfo.Directory.FullName);
-                File.Create(savedata).Dispose();
-            }
-
-            foreach (string node in nodeList)
-            {
-                using (WebClient webClient = new WebClient())
+                File.Create(directory+folder).Dispose();
+                foreach (string node in nodeList)
                 {
-                    webClient.DownloadFile(node, imagedata + folder + "node" + num.ToString() + ".png");
-                    num++;
+                    using (WebClient webClient = new WebClient())
+                    {
+                        webClient.DownloadFile(node, directory + "\\" + folder + "\\node" + num.ToString() + ".png");
+                        num++;
+                    }
                 }
-            }
+                MessageBox.Show("Download Complete");
 
-            MessageBox.Show("Download Complete");
+            }
+            else MessageBox.Show("You already have those images!");
+        
         }
 
         // Check if string is allcaps
@@ -214,7 +217,7 @@ namespace WindowsFormsApp1
                 var isNumeric = int.TryParse(s, out int i);
                 if (isNumeric) result += s;
             }
-            return result + "\\";
+            return result;
         }
 
         // Crop a given image and return it.
@@ -243,11 +246,28 @@ namespace WindowsFormsApp1
         // Parses and organizes the data from Google Vision in to the table categories.
         public async void parsetable_Click(object sender, EventArgs e)
         {
-
+            string path = "";
+            using (var fldrDlg = new FolderBrowserDialog())
+            {
+                fldrDlg.SelectedPath = directory;
+                if (fldrDlg.ShowDialog() == DialogResult.OK)
+                {
+                    var isNumerical = int.TryParse(fldrDlg.SelectedPath.Split('\\').Last(), out int z);
+                    
+                    Console.WriteLine(fldrDlg.SelectedPath.Split('\\').Last());
+                    if (isNumerical) path = fldrDlg.SelectedPath;
+                    else
+                    {
+                        MessageBox.Show("Please select a Date folder!");
+                        return;
+                    }
+                }
+            }
+            
             for (int i = 1; i <= 5; i++)
             {
                 // String name of the file.
-                string pic = imagedata + "node" + i.ToString();
+                string pic = path + "\\node" + i.ToString();
                 // Load and Save nodes as cropped images (.jpg file format)
                 if (File.Exists(pic + ".png"))
                 {
@@ -310,7 +330,7 @@ namespace WindowsFormsApp1
 
         private void Folder_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(@imagedata);
+            System.Diagnostics.Process.Start(directory);
         }
     }
 }
