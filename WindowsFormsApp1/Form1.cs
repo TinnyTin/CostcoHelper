@@ -242,68 +242,79 @@ namespace WindowsFormsApp1
         {
             Console.WriteLine(e.GetType());
         }
+        private int clickCounter = 0;
 
         // Parses and organizes the data from Google Vision in to the table categories.
         public async void parsetable_Click(object sender, EventArgs e)
         {
-            string path = "";
-            using (var fldrDlg = new FolderBrowserDialog())
+            if (this.clickCounter < 1)
             {
-                fldrDlg.SelectedPath = directory;
-                if (fldrDlg.ShowDialog() == DialogResult.OK)
+                string path = "";
+                using (var fldrDlg = new FolderBrowserDialog())
                 {
-                    var isNumerical = int.TryParse(fldrDlg.SelectedPath.Split('\\').Last(), out int z);
-                    
-                    Console.WriteLine(fldrDlg.SelectedPath.Split('\\').Last());
-                    if (isNumerical) path = fldrDlg.SelectedPath;
-                    else
+                    fldrDlg.SelectedPath = directory;
+                    if (fldrDlg.ShowDialog() == DialogResult.OK)
                     {
-                        MessageBox.Show("Please select a Date folder!");
-                        return;
+                        var isNumerical = int.TryParse(fldrDlg.SelectedPath.Split('\\').Last(), out int z);
+
+                        Console.WriteLine(fldrDlg.SelectedPath.Split('\\').Last());
+                        if (isNumerical) path = fldrDlg.SelectedPath;
+                        else
+                        {
+                            MessageBox.Show("Please select a Date folder!");
+                            return;
+                        }
                     }
                 }
+
+                for (int i = 1; i <= 5; i++)
+                {
+                    // String name of the file.
+                    string pic = path + "\\node" + i.ToString();
+                    // Load and Save nodes as cropped images (.jpg file format)
+                    if (File.Exists(pic + ".png"))
+                    {
+                        System.Drawing.Image image = System.Drawing.Image.FromFile(pic + ".png");
+                        cropImage(image).Save(pic + ".jpg");
+                        string[] text = await RequestGoogleVisionAsync(pic);
+                        Item result = parseDescription(text, pic);
+
+                        // ADD TO ROW
+                        if (!(bool)result.meat && !(result.saleprice == 0 && !result.clearance))
+                        {
+                            dataGridView1.Rows.Add(removeInts(result.name), result.initprice, result.saleprice, result.discount, result.clearance, result.img);
+                        }
+                        else
+                        {
+                            dataGridView2.Rows.Add(result.name, result.img);
+                        }
+                    }
+                }
+                this.clickCounter++;
             }
             
-            for (int i = 1; i <= 5; i++)
+            else
             {
-                // String name of the file.
-                string pic = path + "\\node" + i.ToString();
-                // Load and Save nodes as cropped images (.jpg file format)
-                if (File.Exists(pic + ".png"))
-                {
-                    System.Drawing.Image image = System.Drawing.Image.FromFile(pic + ".png");
-                    cropImage(image).Save(pic + ".jpg");
-                    string[] text = await RequestGoogleVisionAsync(pic);
-                    Item result = parseDescription(text, pic);
-
-                    // ADD TO ROW
-                    if (!(bool)result.meat && !(result.saleprice == 0 && !result.clearance))
-                    {
-                        dataGridView1.Rows.Add(removeInts(result.name), result.initprice, result.saleprice, result.discount, result.clearance, result.img);
-                    }
-                    else
-                    {
-                        dataGridView2.Rows.Add(result.name, result.img);
-                    }
-                }
+                MessageBox.Show("Table is already populated.");
+                return;
             }
 
         }
 
-    
         // Loads table according to data parsed from savedata.txt
         private void loadsaved_Click(object sender, EventArgs e)
         {
             
-            StreamReader reader = File.OpenText(savedata);
-            string line;
-            while ((line = reader.ReadLine()) != null)
-            {
-                string[] res = line.Split(';');
-                dataGridView1.Rows.Add(res[0], res[1], res[2], res[3], res[4], res[5]);
+                StreamReader reader = File.OpenText(savedata);
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    string[] res = line.Split(';');
+                    dataGridView1.Rows.Add(res[0], res[1], res[2], res[3], res[4], res[5]);
 
-            }
-            reader.Close();
+                }
+                reader.Close();
+
         }
 
         // Save current table data when application closes
