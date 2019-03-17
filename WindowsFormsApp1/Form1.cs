@@ -145,45 +145,50 @@ namespace WindowsFormsApp1
         // RETRIEVE ON CLICK
         private void retrieve_Click(object sender, EventArgs e)
         {
-
-            int num = 1;
-            var data = new MyWebClient().DownloadString(textBox1.Text);
-            var doc = new HtmlAgilityPack.HtmlDocument();
-            doc.LoadHtml(data);
-            var htmlNodeList = doc.DocumentNode.SelectNodes("//dt[@class='gallery-icon landscape']");
-            var nodeList = new List<string>();
-            folder = parseDate(textBox1.Text);
-            
-
-            foreach (var node in htmlNodeList)
+            if (textBox1.Text.Contains("www.cocowest.ca"))
             {
-                var src = node.SelectSingleNode(".//img").GetAttributeValue("src", "src not found");
-                if (!src.ToString().Contains("Costco"))
-                {
-                    nodeList.Add(node.SelectSingleNode(".//img").GetAttributeValue("src", "src not found"));
-                }
-            }
-            var link = htmlNodeList[0].GetAttributeValue("src", "not found");
+                int num = 1;
+                var data = new MyWebClient().DownloadString(textBox1.Text);
+                var doc = new HtmlAgilityPack.HtmlDocument();
+                doc.LoadHtml(data);
+                var htmlNodeList = doc.DocumentNode.SelectNodes("//dt[@class='gallery-icon landscape']");
+                var nodeList = new List<string>();
+                folder = parseDate(textBox1.Text);
 
-            // Check if directory exists
-            FileInfo fileInfo = new FileInfo(directory + "\\" + folder + "\\node1.png");
-            if (!fileInfo.Exists)
-            {
-                Directory.CreateDirectory(fileInfo.Directory.FullName);
-                File.Create(directory+folder).Dispose();
-                foreach (string node in nodeList)
+
+                foreach (var node in htmlNodeList)
                 {
-                    using (WebClient webClient = new WebClient())
+                    var src = node.SelectSingleNode(".//img").GetAttributeValue("src", "src not found");
+                    if (!src.ToString().Contains("Costco"))
                     {
-                        webClient.DownloadFile(node, directory + "\\" + folder + "\\node" + num.ToString() + ".png");
-                        num++;
+                        nodeList.Add(node.SelectSingleNode(".//img").GetAttributeValue("src", "src not found"));
                     }
                 }
-                MessageBox.Show("Download Complete");
+                var link = htmlNodeList[0].GetAttributeValue("src", "not found");
 
+                // Check if directory exists
+                FileInfo fileInfo = new FileInfo(directory + "\\" + folder + "\\node1.png");
+                if (!fileInfo.Exists)
+                {
+                    Directory.CreateDirectory(fileInfo.Directory.FullName);
+                    File.Create(directory + folder).Dispose();
+                    foreach (string node in nodeList)
+                    {
+                        using (WebClient webClient = new WebClient())
+                        {
+                            webClient.DownloadFile(node, directory + "\\" + folder + "\\node" + num.ToString() + ".png");
+                            num++;
+                        }
+                    }
+                    MessageBox.Show("Download Complete");
+
+                }
+                else MessageBox.Show("You already have those images!");
             }
-            else MessageBox.Show("You already have those images!");
-        
+            else
+            {
+                MessageBox.Show("Please enter a cocowest.ca URL");
+            }
         }
 
         // Check if string is allcaps
@@ -242,12 +247,13 @@ namespace WindowsFormsApp1
         {
             Console.WriteLine(e.GetType());
         }
-        private int clickCounter = 0;
+
+        private int parseCounter = 0;
 
         // Parses and organizes the data from Google Vision in to the table categories.
         public async void parsetable_Click(object sender, EventArgs e)
         {
-            if (this.clickCounter < 1)
+            if (this.parseCounter < 1)
             {
                 string path = "";
                 using (var fldrDlg = new FolderBrowserDialog())
@@ -290,21 +296,25 @@ namespace WindowsFormsApp1
                         }
                     }
                 }
-                this.clickCounter++;
             }
             
             else
             {
-                MessageBox.Show("Table is already populated.");
-                return;
+                MessageBox.Show("Table is already parsed.");
             }
-
+            this.parseCounter++;
         }
+
+            
+        
+
+        private int clickCounter = 0;
 
         // Loads table according to data parsed from savedata.txt
         private void loadsaved_Click(object sender, EventArgs e)
         {
-            
+            if (this.clickCounter < 1)
+            {
                 StreamReader reader = File.OpenText(savedata);
                 string line;
                 while ((line = reader.ReadLine()) != null)
@@ -314,6 +324,14 @@ namespace WindowsFormsApp1
 
                 }
                 reader.Close();
+            }
+            
+            else
+            {
+                MessageBox.Show("Table is already loaded.");
+                return;
+            }
+            this.clickCounter++;
 
         }
 
