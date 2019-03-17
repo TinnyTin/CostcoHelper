@@ -217,7 +217,8 @@ namespace WindowsFormsApp1
         {
             string result = "";
             string[] splitURL = url.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (string s in splitURL)
+            string[] hyphenChunks = splitURL.Last().Split(new string[] { "-" }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string s in hyphenChunks)
             {
                 var isNumeric = int.TryParse(s, out int i);
                 if (isNumeric) result += s;
@@ -261,7 +262,7 @@ namespace WindowsFormsApp1
                     fldrDlg.SelectedPath = directory;
                     if (fldrDlg.ShowDialog() == DialogResult.OK)
                     {
-                        var isNumerical = int.TryParse(fldrDlg.SelectedPath.Split('\\').Last(), out int z);
+                        var isNumerical = double.TryParse(fldrDlg.SelectedPath.Split('\\').Last(), out double z);
 
                         Console.WriteLine(fldrDlg.SelectedPath.Split('\\').Last());
                         if (isNumerical) path = fldrDlg.SelectedPath;

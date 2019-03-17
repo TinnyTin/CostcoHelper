@@ -51,6 +51,7 @@ namespace WindowsFormsApp1
             this.Meat = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Image = new System.Windows.Forms.DataGridViewLinkColumn();
             this.loadsaved = new System.Windows.Forms.Button();
+            this.DateLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
@@ -206,11 +207,21 @@ namespace WindowsFormsApp1
             this.loadsaved.UseVisualStyleBackColor = true;
             this.loadsaved.Click += new System.EventHandler(this.loadsaved_Click);
             // 
+            // DateLabel
+            // 
+            this.DateLabel.AutoSize = true;
+            this.DateLabel.Location = new System.Drawing.Point(563, 39);
+            this.DateLabel.Name = "DateLabel";
+            this.DateLabel.Size = new System.Drawing.Size(36, 13);
+            this.DateLabel.TabIndex = 11;
+            this.DateLabel.Text = "Date: ";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(906, 688);
+            this.Controls.Add(this.DateLabel);
             this.Controls.Add(this.loadsaved);
             this.Controls.Add(this.dataGridView2);
             this.Controls.Add(this.parsetable);
@@ -283,6 +294,7 @@ namespace WindowsFormsApp1
         private DataGridViewTextBoxColumn clearance;
         private DataGridViewLinkColumn Picture;
         private Button loadsaved;
+        private Label DateLabel;
     }
 }
 
