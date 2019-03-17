@@ -145,7 +145,7 @@ namespace WindowsFormsApp1
         // RETRIEVE ON CLICK
         private void retrieve_Click(object sender, EventArgs e)
         {
-            if (textBox1.Text.Contains("www.cocowest.ca"))
+            if (textBox1.Text.Contains("cocowest.ca"))
             {
                 int num = 1;
                 var data = new MyWebClient().DownloadString(textBox1.Text);
@@ -304,9 +304,6 @@ namespace WindowsFormsApp1
             }
             this.parseCounter++;
         }
-
-            
-        
 
         private int clickCounter = 0;
 
