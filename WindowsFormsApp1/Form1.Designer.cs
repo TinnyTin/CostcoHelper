@@ -97,9 +97,9 @@ namespace WindowsFormsApp1
             // retrieve
             // 
             this.retrieve.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.retrieve.Location = new System.Drawing.Point(723, 6);
+            this.retrieve.Location = new System.Drawing.Point(713, 6);
             this.retrieve.Name = "retrieve";
-            this.retrieve.Size = new System.Drawing.Size(75, 23);
+            this.retrieve.Size = new System.Drawing.Size(84, 23);
             this.retrieve.TabIndex = 4;
             this.retrieve.Text = "Retrieve";
             this.retrieve.UseVisualStyleBackColor = true;
@@ -117,7 +117,7 @@ namespace WindowsFormsApp1
             this.Picture});
             this.dataGridView1.Location = new System.Drawing.Point(2, 61);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(902, 407);
+            this.dataGridView1.Size = new System.Drawing.Size(915, 407);
             this.dataGridView1.TabIndex = 5;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             this.dataGridView1.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellValueChanged);
@@ -154,9 +154,9 @@ namespace WindowsFormsApp1
             // 
             // Folder
             // 
-            this.Folder.Location = new System.Drawing.Point(804, 5);
+            this.Folder.Location = new System.Drawing.Point(713, 32);
             this.Folder.Name = "Folder";
-            this.Folder.Size = new System.Drawing.Size(78, 24);
+            this.Folder.Size = new System.Drawing.Size(84, 27);
             this.Folder.TabIndex = 6;
             this.Folder.Text = "Open Folder";
             this.Folder.UseVisualStyleBackColor = true;
@@ -164,9 +164,9 @@ namespace WindowsFormsApp1
             // 
             // parsetable
             // 
-            this.parsetable.Location = new System.Drawing.Point(689, 32);
+            this.parsetable.Location = new System.Drawing.Point(803, 6);
             this.parsetable.Name = "parsetable";
-            this.parsetable.Size = new System.Drawing.Size(109, 26);
+            this.parsetable.Size = new System.Drawing.Size(104, 24);
             this.parsetable.TabIndex = 7;
             this.parsetable.Text = "Populate Table";
             this.parsetable.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -181,7 +181,7 @@ namespace WindowsFormsApp1
             this.Image});
             this.dataGridView2.Location = new System.Drawing.Point(2, 474);
             this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(902, 212);
+            this.dataGridView2.Size = new System.Drawing.Size(915, 212);
             this.dataGridView2.TabIndex = 8;
             // 
             // Meat
@@ -198,10 +198,10 @@ namespace WindowsFormsApp1
             // 
             // loadsaved
             // 
-            this.loadsaved.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
+            this.loadsaved.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.loadsaved.Location = new System.Drawing.Point(803, 32);
             this.loadsaved.Name = "loadsaved";
-            this.loadsaved.Size = new System.Drawing.Size(91, 26);
+            this.loadsaved.Size = new System.Drawing.Size(104, 27);
             this.loadsaved.TabIndex = 10;
             this.loadsaved.Text = "Load Saved Table";
             this.loadsaved.UseVisualStyleBackColor = true;
@@ -210,9 +210,10 @@ namespace WindowsFormsApp1
             // DateLabel
             // 
             this.DateLabel.AutoSize = true;
-            this.DateLabel.Location = new System.Drawing.Point(563, 39);
+            this.DateLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.DateLabel.Location = new System.Drawing.Point(440, 41);
             this.DateLabel.Name = "DateLabel";
-            this.DateLabel.Size = new System.Drawing.Size(36, 13);
+            this.DateLabel.Size = new System.Drawing.Size(39, 15);
             this.DateLabel.TabIndex = 11;
             this.DateLabel.Text = "Date: ";
             // 
@@ -220,7 +221,7 @@ namespace WindowsFormsApp1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(906, 688);
+            this.ClientSize = new System.Drawing.Size(919, 688);
             this.Controls.Add(this.DateLabel);
             this.Controls.Add(this.loadsaved);
             this.Controls.Add(this.dataGridView2);

@@ -154,7 +154,7 @@ namespace WindowsFormsApp1
                 var htmlNodeList = doc.DocumentNode.SelectNodes("//dt[@class='gallery-icon landscape']");
                 var nodeList = new List<string>();
                 folder = parseDate(textBox1.Text);
-
+                DateLabel.Text = "Date: " + folder;
 
                 foreach (var node in htmlNodeList)
                 {
@@ -221,9 +221,13 @@ namespace WindowsFormsApp1
             foreach (string s in hyphenChunks)
             {
                 var isNumeric = int.TryParse(s, out int i);
-                if (isNumeric) result += s;
+                bool isMonth = false;
+                if (s == "jan" || s == "feb" || s == "mar" || s == "apr" || s == "may" || s == "jun" ||
+                    s == "jul" || s == "aug" || s == "sep" || s == "oct" || s == "nov" || s == "dec") 
+                    isMonth = true;    
+                if (isNumeric || isMonth) result += s+"-";
             }
-            return result;
+            return result.Substring(0, result.Length - 1); ;
         }
 
         // Crop a given image and return it.
@@ -256,16 +260,23 @@ namespace WindowsFormsApp1
         {
             if (this.parseCounter < 1)
             {
+
                 string path = "";
                 using (var fldrDlg = new FolderBrowserDialog())
                 {
                     fldrDlg.SelectedPath = directory;
                     if (fldrDlg.ShowDialog() == DialogResult.OK)
                     {
-                        var isNumerical = double.TryParse(fldrDlg.SelectedPath.Split('\\').Last(), out double z);
-
+                        //var isNumerical = double.TryParse(fldrDlg.SelectedPath.Split('\\').Last(), out double z);
+                        DateLabel.Text = ("Date:" +fldrDlg.SelectedPath.Replace(directory+"\\", ""));
                         Console.WriteLine(fldrDlg.SelectedPath.Split('\\').Last());
-                        if (isNumerical) path = fldrDlg.SelectedPath;
+                        if (fldrDlg.SelectedPath.Contains("jan") || fldrDlg.SelectedPath.Contains("feb") ||
+                            fldrDlg.SelectedPath.Contains("mar") || fldrDlg.SelectedPath.Contains("apr") ||
+                            fldrDlg.SelectedPath.Contains("may") || fldrDlg.SelectedPath.Contains("jun") ||
+                            fldrDlg.SelectedPath.Contains("jul") || fldrDlg.SelectedPath.Contains("aug") ||
+                            fldrDlg.SelectedPath.Contains("sep") || fldrDlg.SelectedPath.Contains("oct") ||
+                            fldrDlg.SelectedPath.Contains("nov") || fldrDlg.SelectedPath.Contains("dec"))
+                            path = fldrDlg.SelectedPath;
                         else
                         {
                             MessageBox.Show("Please select a Date folder!");
