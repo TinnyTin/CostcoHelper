@@ -285,6 +285,8 @@ namespace WindowsFormsApp1
                     }
                 }
 
+                savedata = path + "\\savedata.txt";
+
                 for (int i = 1; i <= 5; i++)
                 {
                     // String name of the file.
@@ -307,6 +309,11 @@ namespace WindowsFormsApp1
                             dataGridView2.Rows.Add(result.name, result.img);
                         }
                     }
+                    else
+                    {
+                        MessageBox.Show("Please select a Date folder!");
+                        return;
+                    }
                 }
             }
             
@@ -322,24 +329,53 @@ namespace WindowsFormsApp1
         // Loads table according to data parsed from savedata.txt
         private void loadsaved_Click(object sender, EventArgs e)
         {
-            if (this.clickCounter < 1)
+            string path = "";
+            using (var fldrDlg = new FolderBrowserDialog())
             {
-                StreamReader reader = File.OpenText(savedata);
-                string line;
-                while ((line = reader.ReadLine()) != null)
+                fldrDlg.SelectedPath = directory;
+                if (fldrDlg.ShowDialog() == DialogResult.OK)
                 {
-                    string[] res = line.Split(';');
-                    dataGridView1.Rows.Add(res[0], res[1], res[2], res[3], res[4], res[5]);
+                    if (fldrDlg.SelectedPath.Contains("jan") || fldrDlg.SelectedPath.Contains("feb") ||
+                        fldrDlg.SelectedPath.Contains("mar") || fldrDlg.SelectedPath.Contains("apr") ||
+                        fldrDlg.SelectedPath.Contains("may") || fldrDlg.SelectedPath.Contains("jun") ||
+                        fldrDlg.SelectedPath.Contains("jul") || fldrDlg.SelectedPath.Contains("aug") ||
+                        fldrDlg.SelectedPath.Contains("sep") || fldrDlg.SelectedPath.Contains("oct") ||
+                        fldrDlg.SelectedPath.Contains("nov") || fldrDlg.SelectedPath.Contains("dec"))
+                    {
+                        path = fldrDlg.SelectedPath;
+                    }
 
+                    else
+                    {
+                        MessageBox.Show("Table is already loaded.");
+                        return;
+                    }
                 }
-                reader.Close();
-            }
-            
-            else
-            {
-                MessageBox.Show("Table is already loaded.");
-                return;
-            }
+
+                savedata = path + "\\savedata.txt";
+
+                //if (this.clickCounter < 1)
+                //{
+                FileInfo fileInfo = new FileInfo(savedata);
+                if (fileInfo.Exists)
+                {
+                    StreamReader reader = File.OpenText(savedata);
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        string[] res = line.Split(';');
+                        dataGridView1.Rows.Add(res[0], res[1], res[2], res[3], res[4], res[5]);
+
+                    }
+                    reader.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Save file does not exist for this folder.");
+                    return;
+                }
+              }
+ //         }
             this.clickCounter++;
 
         }
