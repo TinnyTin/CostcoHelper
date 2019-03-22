@@ -253,62 +253,30 @@ namespace WindowsFormsApp1
             Console.WriteLine(e.GetType());
         }
 
-        private int parseCounter = 0;
 
         // Parses and organizes the data from Google Vision in to the table categories.
         public async void parsetable_Click(object sender, EventArgs e)
         {
-            if (this.parseCounter < 1)
+            dataGridView1.Rows.Clear();
+            dataGridView1.Refresh();
+            dataGridView2.Rows.Clear();
+            dataGridView2.Refresh();
+            string path = "";
+            using (var fldrDlg = new FolderBrowserDialog())
             {
-
-                string path = "";
-                using (var fldrDlg = new FolderBrowserDialog())
+                fldrDlg.SelectedPath = directory;
+                if (fldrDlg.ShowDialog() == DialogResult.OK)
                 {
-                    fldrDlg.SelectedPath = directory;
-                    if (fldrDlg.ShowDialog() == DialogResult.OK)
-                    {
-                        //var isNumerical = double.TryParse(fldrDlg.SelectedPath.Split('\\').Last(), out double z);
-                        DateLabel.Text = ("Date:" +fldrDlg.SelectedPath.Replace(directory+"\\", ""));
-                        Console.WriteLine(fldrDlg.SelectedPath.Split('\\').Last());
-                        if (fldrDlg.SelectedPath.Contains("jan") || fldrDlg.SelectedPath.Contains("feb") ||
-                            fldrDlg.SelectedPath.Contains("mar") || fldrDlg.SelectedPath.Contains("apr") ||
-                            fldrDlg.SelectedPath.Contains("may") || fldrDlg.SelectedPath.Contains("jun") ||
-                            fldrDlg.SelectedPath.Contains("jul") || fldrDlg.SelectedPath.Contains("aug") ||
-                            fldrDlg.SelectedPath.Contains("sep") || fldrDlg.SelectedPath.Contains("oct") ||
-                            fldrDlg.SelectedPath.Contains("nov") || fldrDlg.SelectedPath.Contains("dec"))
-                            path = fldrDlg.SelectedPath;
-                        else
-                        {
-                            MessageBox.Show("Please select a Date folder!");
-                            return;
-                        }
-                    }
-                }
-
-                savedata = path + "\\savedata.txt";
-
-                for (int i = 1; i <= 5; i++)
-                {
-                    // String name of the file.
-                    string pic = path + "\\node" + i.ToString();
-                    // Load and Save nodes as cropped images (.jpg file format)
-                    if (File.Exists(pic + ".png"))
-                    {
-                        System.Drawing.Image image = System.Drawing.Image.FromFile(pic + ".png");
-                        cropImage(image).Save(pic + ".jpg");
-                        string[] text = await RequestGoogleVisionAsync(pic);
-                        Item result = parseDescription(text, pic);
-
-                        // ADD TO ROW
-                        if (!(bool)result.meat && !(result.saleprice == 0 && !result.clearance))
-                        {
-                            dataGridView1.Rows.Add(removeInts(result.name), result.initprice, result.saleprice, result.discount, result.clearance, result.img);
-                        }
-                        else
-                        {
-                            dataGridView2.Rows.Add(result.name, result.img);
-                        }
-                    }
+                    //var isNumerical = double.TryParse(fldrDlg.SelectedPath.Split('\\').Last(), out double z);
+                    DateLabel.Text = ("Date:" +fldrDlg.SelectedPath.Replace(directory+"\\", ""));
+                    Console.WriteLine(fldrDlg.SelectedPath.Split('\\').Last());
+                    if (fldrDlg.SelectedPath.Contains("jan") || fldrDlg.SelectedPath.Contains("feb") ||
+                        fldrDlg.SelectedPath.Contains("mar") || fldrDlg.SelectedPath.Contains("apr") ||
+                        fldrDlg.SelectedPath.Contains("may") || fldrDlg.SelectedPath.Contains("jun") ||
+                        fldrDlg.SelectedPath.Contains("jul") || fldrDlg.SelectedPath.Contains("aug") ||
+                        fldrDlg.SelectedPath.Contains("sep") || fldrDlg.SelectedPath.Contains("oct") ||
+                        fldrDlg.SelectedPath.Contains("nov") || fldrDlg.SelectedPath.Contains("dec"))
+                        path = fldrDlg.SelectedPath;
                     else
                     {
                         MessageBox.Show("Please select a Date folder!");
@@ -316,19 +284,48 @@ namespace WindowsFormsApp1
                     }
                 }
             }
-            
-            else
+
+            savedata = path + "\\savedata.txt";
+
+            for (int i = 1; i <= 5; i++)
             {
-                MessageBox.Show("Table is already parsed.");
+                // String name of the file.
+                string pic = path + "\\node" + i.ToString();
+                // Load and Save nodes as cropped images (.jpg file format)
+                if (File.Exists(pic + ".png"))
+                {
+                    System.Drawing.Image image = System.Drawing.Image.FromFile(pic + ".png");
+                    cropImage(image).Save(pic + ".jpg");
+                    string[] text = await RequestGoogleVisionAsync(pic);
+                    Item result = parseDescription(text, pic);
+
+                    // ADD TO ROW
+                    if (!(bool)result.meat && !(result.saleprice == 0 && !result.clearance))
+                    {
+                        dataGridView1.Rows.Add(removeInts(result.name), result.initprice, result.saleprice, result.discount, result.clearance, result.img);
+                    }
+                    else
+                    {
+                        dataGridView2.Rows.Add(result.name, result.img);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please select a Date folder!");
+                    return;
+                }
             }
-            this.parseCounter++;
+            
         }
 
-        private int clickCounter = 0;
 
         // Loads table according to data parsed from savedata.txt
         private void loadsaved_Click(object sender, EventArgs e)
         {
+            dataGridView1.Rows.Clear();
+            dataGridView1.Refresh();
+            dataGridView2.Rows.Clear();
+            dataGridView2.Refresh();
             string path = "";
             using (var fldrDlg = new FolderBrowserDialog())
             {
@@ -344,7 +341,6 @@ namespace WindowsFormsApp1
                     {
                         path = fldrDlg.SelectedPath;
                     }
-
                     else
                     {
                         MessageBox.Show("Table is already loaded.");
@@ -353,10 +349,8 @@ namespace WindowsFormsApp1
                 }
 
                 savedata = path + "\\savedata.txt";
-
-                //if (this.clickCounter < 1)
-                //{
                 FileInfo fileInfo = new FileInfo(savedata);
+
                 if (fileInfo.Exists)
                 {
                     StreamReader reader = File.OpenText(savedata);
@@ -375,9 +369,6 @@ namespace WindowsFormsApp1
                     return;
                 }
               }
- //         }
-            this.clickCounter++;
-
         }
 
         // Save current table data when application closes
