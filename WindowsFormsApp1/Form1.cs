@@ -315,7 +315,7 @@ namespace WindowsFormsApp1
                     return;
                 }
             }
-            
+            numLabel.Text = "Number of Sale Items: " + numItems().ToString();
         }
 
 
@@ -369,6 +369,14 @@ namespace WindowsFormsApp1
                     return;
                 }
               }
+            numLabel.Text = "Number of Sale Items: " + numItems().ToString();
+            DateLabel.Text = path.Substring(path.Length-directory.Length+13); //+13 for 'CostcoHelper' parent folder
+        }
+
+        //returns the # of rows in both tables
+        private int numItems()
+        {
+            return dataGridView1.RowCount + dataGridView2.RowCount - 2;
         }
 
         // Save current table data when application closes
