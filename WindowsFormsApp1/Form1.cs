@@ -327,7 +327,7 @@ namespace WindowsFormsApp1
             string path = "";
             using (var fldrDlg = new FolderBrowserDialog())
             {
-                fldrDlg.SelectedPath = directory;
+                fldrDlg.SelectedPath = directory + "\\" + folder;
                 if (fldrDlg.ShowDialog() == DialogResult.OK)
                 {
                     if (fldrDlg.SelectedPath.Contains("jan") || fldrDlg.SelectedPath.Contains("feb") ||
@@ -357,11 +357,18 @@ namespace WindowsFormsApp1
                     string line;
                     while ((line = reader.ReadLine()) != null)
                     {
-                        string[] res = line.Split(';');
-                        dataGridView1.Rows.Add(res[0], res[1], res[2], res[3], res[4], res[5]);
+                        if (line == "@meat") break;
+                        string[] colData = line.Split(';');
+                        dataGridView1.Rows.Add(colData[0], colData[1], colData[2], colData[3], colData[4], colData[5]);
+                        
+                    }
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        string[] colData = line.Split(';');
+                        dataGridView2.Rows.Add(colData[0], colData[1]);
 
                     }
-                    reader.Close();
+                        reader.Close();
                 }
                 else
                 {
