@@ -220,11 +220,7 @@ namespace WindowsFormsApp1
             foreach (string s in hyphenChunks)
             {
                 var isNumeric = int.TryParse(s, out int i);
-                bool isMonth = false;
-                if (s == "jan" || s == "feb" || s == "mar" || s == "apr" || s == "may" || s == "jun" ||
-                    s == "jul" || s == "aug" || s == "sep" || s == "oct" || s == "nov" || s == "dec") 
-                    isMonth = true;    
-                if (isNumeric || isMonth) result += s+"-";
+                if (isNumeric || isMonth(s)) result += s+"-";
             }
             return result.Substring(0, result.Length - 1); ;
         }
@@ -263,12 +259,7 @@ namespace WindowsFormsApp1
                 if (fldrDlg.ShowDialog() == DialogResult.OK)
                 {
 
-                    if (fldrDlg.SelectedPath.Contains("jan") || fldrDlg.SelectedPath.Contains("feb") ||
-                        fldrDlg.SelectedPath.Contains("mar") || fldrDlg.SelectedPath.Contains("apr") ||
-                        fldrDlg.SelectedPath.Contains("may") || fldrDlg.SelectedPath.Contains("jun") ||
-                        fldrDlg.SelectedPath.Contains("jul") || fldrDlg.SelectedPath.Contains("aug") ||
-                        fldrDlg.SelectedPath.Contains("sep") || fldrDlg.SelectedPath.Contains("oct") ||
-                        fldrDlg.SelectedPath.Contains("nov") || fldrDlg.SelectedPath.Contains("dec"))
+                    if (isMonth(fldrDlg.SelectedPath))
                     {
                         path = fldrDlg.SelectedPath;
                         folder = fldrDlg.SelectedPath.ToString().Split(new[] {"\\"} ,StringSplitOptions.RemoveEmptyEntries).Last();
@@ -330,12 +321,7 @@ namespace WindowsFormsApp1
                 fldrDlg.SelectedPath = directory + "\\" + folder;
                 if (fldrDlg.ShowDialog() == DialogResult.OK)
                 {
-                    if (fldrDlg.SelectedPath.Contains("jan") || fldrDlg.SelectedPath.Contains("feb") ||
-                        fldrDlg.SelectedPath.Contains("mar") || fldrDlg.SelectedPath.Contains("apr") ||
-                        fldrDlg.SelectedPath.Contains("may") || fldrDlg.SelectedPath.Contains("jun") ||
-                        fldrDlg.SelectedPath.Contains("jul") || fldrDlg.SelectedPath.Contains("aug") ||
-                        fldrDlg.SelectedPath.Contains("sep") || fldrDlg.SelectedPath.Contains("oct") ||
-                        fldrDlg.SelectedPath.Contains("nov") || fldrDlg.SelectedPath.Contains("dec"))
+                    if (isMonth(fldrDlg.SelectedPath))
                     {
                         path = fldrDlg.SelectedPath;
                         folder = fldrDlg.SelectedPath.ToString().Split(new[] { "\\" }, StringSplitOptions.RemoveEmptyEntries).Last();
@@ -415,6 +401,12 @@ namespace WindowsFormsApp1
                     tw.WriteLine();
                 }
             }
+        }
+
+        private bool isMonth(string s)
+        {
+            return (s == "jan" || s == "feb" || s == "mar" || s == "apr" || s == "may" || s == "jun"
+                || s == "jul" || s == "aug" || s == "sep" || s == "oct" || s == "nov" || s == "dec");
         }
 
         private void Folder_Click(object sender, EventArgs e)
