@@ -262,8 +262,7 @@ namespace WindowsFormsApp1
                 fldrDlg.SelectedPath = directory;
                 if (fldrDlg.ShowDialog() == DialogResult.OK)
                 {
-                    
-                    
+
                     if (fldrDlg.SelectedPath.Contains("jan") || fldrDlg.SelectedPath.Contains("feb") ||
                         fldrDlg.SelectedPath.Contains("mar") || fldrDlg.SelectedPath.Contains("apr") ||
                         fldrDlg.SelectedPath.Contains("may") || fldrDlg.SelectedPath.Contains("jun") ||
@@ -312,6 +311,7 @@ namespace WindowsFormsApp1
                     return;
                 }
             }
+            saveTableData();
             numLabel.Text = "Number of Sale Items: " + numItems().ToString();
         }
 
@@ -370,7 +370,6 @@ namespace WindowsFormsApp1
                 }
               }
             numLabel.Text = "Number of Sale Items: " + numItems().ToString();
-            DateLabel.Text = path.Substring(path.Length-directory.Length+13); //+13 for 'CostcoHelper' parent folder
         }
 
         //returns the # of rows in both tables
@@ -379,8 +378,8 @@ namespace WindowsFormsApp1
             return dataGridView1.RowCount + dataGridView2.RowCount - 2;
         }
 
-        // Save current table data when application closes
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        // Save current table data
+        private void saveTableData()
         {
             string savedata = directory + "\\" + folder + "\\savedata.txt";
             FileInfo fileInfo = new FileInfo(savedata);
@@ -396,6 +395,15 @@ namespace WindowsFormsApp1
                     for (int j = 0; j <= dataGridView1.ColumnCount - 1; j++)
                     {
                         tw.Write(dataGridView1.Rows[i].Cells[j].Value.ToString() + ';');
+                    }
+                    tw.WriteLine();
+                }
+                tw.WriteLine("@meat");
+                for (int i = 0; i <= dataGridView2.RowCount - 2; i++)
+                {
+                    for (int j = 0; j <= dataGridView2.ColumnCount - 1; j++)
+                    {
+                        tw.Write(dataGridView2.Rows[i].Cells[j].Value.ToString() + ';');
                     }
                     tw.WriteLine();
                 }
