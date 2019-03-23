@@ -261,10 +261,10 @@ namespace WindowsFormsApp1
         {
             if (dataGridView2.CurrentCell.ColumnIndex.Equals(1) && e.RowIndex != -1)
             {
-                if (dataGridView1.CurrentCell != null && dataGridView1.CurrentCell.Value != null)
+                if (dataGridView2.CurrentCell != null && dataGridView2.CurrentCell.Value != null)
                 {
                     string row = (dataGridView2.CurrentCell.RowIndex + 1).ToString();
-                    string path = "C:\\Users\\Judy\\source\\repos\\judy-chen\\CostcoHelper\\WindowsFormsApp1\\bin\\Debug\\" + row + ".png";
+                    string path = dataGridView2.CurrentCell.Value.ToString(); 
                     Process.Start(path);
                     Console.WriteLine(path.ToString());
 

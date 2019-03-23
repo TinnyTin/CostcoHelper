@@ -405,8 +405,9 @@ namespace WindowsFormsApp1
 
         private bool isMonth(string s)
         {
-            return (s == "jan" || s == "feb" || s == "mar" || s == "apr" || s == "may" || s == "jun"
-                || s == "jul" || s == "aug" || s == "sep" || s == "oct" || s == "nov" || s == "dec");
+            return (s.Contains("jan") || s.Contains("feb") || s.Contains("mar") || s.Contains("apr") ||
+                s.Contains("may") || s.Contains("jun") || s.Contains("jul") || s.Contains("aug") ||
+                s.Contains("sep") || s.Contains("oct") || s.Contains("nov") || s.Contains("dec"));
         }
 
         private void Folder_Click(object sender, EventArgs e)
