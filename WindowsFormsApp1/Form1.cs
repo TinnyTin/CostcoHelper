@@ -16,7 +16,6 @@ namespace WindowsFormsApp1
     {
         static string directory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\CostcoHelper";
         string credentials = directory + "\\costcoapi.json";
-        string savedata = directory + "\\savedata.txt";
         string folder = "";
 
         public Form1()
@@ -248,10 +247,6 @@ namespace WindowsFormsApp1
             return text;
         }
 
-        private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
-            Console.WriteLine(e.GetType());
-        }
 
 
         // Parses and organizes the data from Google Vision in to the table categories.
@@ -267,16 +262,20 @@ namespace WindowsFormsApp1
                 fldrDlg.SelectedPath = directory;
                 if (fldrDlg.ShowDialog() == DialogResult.OK)
                 {
-                    //var isNumerical = double.TryParse(fldrDlg.SelectedPath.Split('\\').Last(), out double z);
-                    DateLabel.Text = ("Date:" +fldrDlg.SelectedPath.Replace(directory+"\\", ""));
-                    Console.WriteLine(fldrDlg.SelectedPath.Split('\\').Last());
+                    
+                    
                     if (fldrDlg.SelectedPath.Contains("jan") || fldrDlg.SelectedPath.Contains("feb") ||
                         fldrDlg.SelectedPath.Contains("mar") || fldrDlg.SelectedPath.Contains("apr") ||
                         fldrDlg.SelectedPath.Contains("may") || fldrDlg.SelectedPath.Contains("jun") ||
                         fldrDlg.SelectedPath.Contains("jul") || fldrDlg.SelectedPath.Contains("aug") ||
                         fldrDlg.SelectedPath.Contains("sep") || fldrDlg.SelectedPath.Contains("oct") ||
                         fldrDlg.SelectedPath.Contains("nov") || fldrDlg.SelectedPath.Contains("dec"))
+                    {
                         path = fldrDlg.SelectedPath;
+                        folder = fldrDlg.SelectedPath.ToString().Split(new[] {"\\"} ,StringSplitOptions.RemoveEmptyEntries).Last();
+                        DateLabel.Text = "Date: " + folder;
+                    }
+                        
                     else
                     {
                         MessageBox.Show("Please select a Date folder!");
@@ -284,8 +283,6 @@ namespace WindowsFormsApp1
                     }
                 }
             }
-
-            savedata = path + "\\savedata.txt";
 
             for (int i = 1; i <= 5; i++)
             {
@@ -319,6 +316,7 @@ namespace WindowsFormsApp1
         }
 
 
+
         // Loads table according to data parsed from savedata.txt
         private void loadsaved_Click(object sender, EventArgs e)
         {
@@ -340,6 +338,8 @@ namespace WindowsFormsApp1
                         fldrDlg.SelectedPath.Contains("nov") || fldrDlg.SelectedPath.Contains("dec"))
                     {
                         path = fldrDlg.SelectedPath;
+                        folder = fldrDlg.SelectedPath.ToString().Split(new[] { "\\" }, StringSplitOptions.RemoveEmptyEntries).Last();
+                        DateLabel.Text = "Date: " + folder;
                     }
                     else
                     {
@@ -348,7 +348,7 @@ namespace WindowsFormsApp1
                     }
                 }
 
-                savedata = path + "\\savedata.txt";
+                string savedata = directory + "\\" + folder + "\\savedata.txt";
                 FileInfo fileInfo = new FileInfo(savedata);
 
                 if (fileInfo.Exists)
@@ -382,6 +382,7 @@ namespace WindowsFormsApp1
         // Save current table data when application closes
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            string savedata = directory + "\\" + folder + "\\savedata.txt";
             FileInfo fileInfo = new FileInfo(savedata);
             if (!fileInfo.Exists)
             {
