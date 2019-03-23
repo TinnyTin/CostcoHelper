@@ -296,7 +296,7 @@ namespace WindowsFormsApp1
                     Item result = parseDescription(text, pic);
 
                     // ADD TO ROW
-                    if (!(bool)result.meat && !(result.saleprice == 0 && !result.clearance))
+                    if (!(bool)result.meat && !(result.saleprice == 0 && !result.clearance) && result.discount > 0)
                     {
                         dataGridView1.Rows.Add(removeInts(result.name), result.initprice, result.saleprice, result.discount, result.clearance, result.img);
                     }
